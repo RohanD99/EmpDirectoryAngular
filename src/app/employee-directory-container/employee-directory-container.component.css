@@ -1,0 +1,87 @@
+
+.cards{
+    width: 100%;
+    padding: 0px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+.user-card{
+    top: 10px;
+    left: 10px;
+    position: relative;
+    display: flex;
+   height: 110px;
+   width: 23%;
+    background-color: #E9E8E8;
+    padding: 8px;
+    margin: 0px;
+    margin-bottom: 18px;
+    margin-right: 1%;  
+}
+.user-photo{
+    width: 90px;
+    height: 100px;
+}
+.user-descr{
+    display: flex;
+    flex-direction: column;
+    margin-left: 18px;
+    
+}
+.user-name{
+    padding-top: 5px;
+    padding-left: 10px;
+    margin: 0px;
+    font-weight: 500;
+    color: #534f4f;
+}
+.user-designation{
+    padding-left: 10px;
+    font-size: 13px;
+    margin: 0px;
+    margin-top: 2px;
+    color: rgba(0, 0, 0, 0.6);
+}
+.user-dept{
+    padding-left: 10px;
+    font-size: 13px;
+    margin: 0px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 5px;
+}
+
+.delete-icon{
+    font-size: 12px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    /* color: red; */
+    cursor: pointer;
+}
+.edit-icon{
+    font-size: 12px;
+    position: absolute;
+    right: 20px;
+    bottom: 5px;
+    cursor: pointer;
+}
+.info-icon{
+    font-size: 10px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    cursor: pointer;
+    color: #948989;
+}
+.social-icons{
+    padding-left: 5px;
+    width: 75px;
+    display: flex;
+    justify-content: space-between;
+    color: #969595;
+}
+.social-icon{
+    padding-left: 4px;
+    font-size: 95%;
+}

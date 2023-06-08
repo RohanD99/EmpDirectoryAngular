@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap');
+@import url("https://kit.fontawesome.com/f0635d86c1.js");
+
+
+*{
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+body{
+    background-color: #ffffff;
+    padding-top: 36px;
+    padding-left: 32px;
+    padding-right: 32px;
+    margin: 0px;
+    width: 100vw;
+    font-family: "Roboto";
+}
