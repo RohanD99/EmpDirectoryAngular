@@ -2,43 +2,54 @@
     <div class="navbar" id="departments">
         <p class="nav-heading">Departments</p>
         <div>
-            <a href="" class="nav-element" id="it">IT</a> <span class="nav-element" id="itDeptCount"></span>
+            <a href="" class="nav-element" id="it">IT</a>
+            <span class="nav-element" [innerText]="departmentCounts['IT'] || 0"></span>
         </div>
         <div>
-            <a href="" class="nav-element" id="humanResource">Human Resources</a> <span class="nav-element" id="hrDeptCount"></span>
+            <a href="" class="nav-element" id="humanResource">Human Resources</a> 
+            <span class="nav-element"  [innerText]="departmentCounts['Human Resource'] || 0"></span>
         </div>
         <div>
-            <a href="" class="nav-element" id="mdDept">MD</a> <span class="nav-element" id="mdDeptCount"></span>
+            <a href="" class="nav-element" id="mdDept">MD</a>
+             <span class="nav-element" [innerText]="departmentCounts['MD'] || 0"></span>
         </div>
         <div>
-            <a href="" class="nav-element" id="salesDept">Sales</a> <span class="nav-element" id="salesDeptCount"></span>
+            <a href="" class="nav-element" id="salesDept">Sales</a> 
+            <span class="nav-element"  [innerText]="departmentCounts['SALES'] || 0"></span>
         </div>
     </div>
     <div class="navbar" id="offices">
         <p class="nav-heading">Offices</p>
         <div>
-        <a href="" class="nav-element">Seattle</a><span class="nav-element" id="seaCount"></span>
+            <a href="" class="nav-element">Seattle</a>
+            <span class="nav-element" [innerText]="locationCounts['Seattle'] || 0"></span>
     </div>
     <div>
-        <a href="" class="nav-element">India</a><span class="nav-element" id="indCount"></span>
+        <a href="" class="nav-element">India</a>
+        <span class="nav-element"  [innerText]="locationCounts['India'] || 0"></span>
     </div>
     </div>
     <div class="navbar" id="jobTitles">
         <p class="nav-heading">Job Titles</p>
         <div>
-            <a href="" class="nav-element">SharePoint Practice Head</a><span class="nav-element" id="sharepointCount"></span>
+            <a href="" class="nav-element">SharePoint Practice Head</a>
+            <span class="nav-element" [innerText]="designationCounts['SharePoint Practice Head'] || 0"></span>
         </div>
         <div>
-        <a href="" class="nav-element">.Net Development Lead</a><span class="nav-element" id=".netCount"></span>
+        <a href="" class="nav-element">.Net Development Lead</a>
+        <span class="nav-element" [innerText]="designationCounts['.Net Development Lead'] || 0"></span>
         </div>
         <div>
-        <a href="" class="nav-element">Recruiting Expert</a><span class="nav-element" id="recruitingCount"></span>
+        <a href="" class="nav-element">Recruiting Expert</a>
+        <span class="nav-element" [innerText]="designationCounts['Recruiting Expert'] || 0"></span>
         </div>  
         <div>
-        <a href="" class="nav-element">Bi Developer</a><span class="nav-element" id="biDeveloperCount"></span>
+        <a href="" class="nav-element">Bi Developer</a>
+        <span class="nav-element" [innerText]="designationCounts['Bi Developer'] || 0"></span>
         </div> 
         <div>
-        <a href="" class="nav-element">Business Analyst</a><span class="nav-element" id="businessAnalystCount"></span>
+        <a href="" class="nav-element">Business Analyst</a>
+        <span class="nav-element" [innerText]="designationCounts['Business Analyst'] || 0"></span>
         </div> 
     </div>
 </div>

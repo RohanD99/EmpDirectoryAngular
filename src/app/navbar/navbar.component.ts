@@ -6,8 +6,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+
   characters: string[] = [];
   isFormVisible: boolean = false;
+  @Input() employees: any[] = [];
+
+  addEmployee(employee: any): void {
+    this.employees.push(employee);
+    this.hideEmployeeForm()
+  }
 
   showEmployeeForm() {
     this.isFormVisible = true;
@@ -36,7 +43,5 @@ export class NavbarComponent {
       const value = target.value;
     }
   }
-
-
 
 }
