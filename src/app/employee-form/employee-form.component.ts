@@ -1,21 +1,27 @@
 import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../employee.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-form',
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.css']
 })
+
 export class EmployeeFormComponent {
+  @Input() isFormVisible: boolean = false;
   @Input() employee: any;
   @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();
   @Output() hideFormEvent = new EventEmitter<void>();
-  editMode: boolean = false;
-  isFormVisible: boolean = true;
+  @Input() selectedEmployee: any = {}; 
+  @Input() editMode: boolean = false;
+  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
+  @Output() closeFormEvent = new EventEmitter<void>();
+
   formGroup!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService) {}
+  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService,private router: Router) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['employee']) {
@@ -23,13 +29,23 @@ export class EmployeeFormComponent {
       if (this.employee) {
         this.formGroup.patchValue(this.employee);
         this.editMode = true;
+      }else{
+        this.editMode = false;
       }
     }
   }
 
-  hideForm(): void {
-    this.hideFormEvent.emit();
-  }
+hideForm(): void {
+  this.isFormVisible = false
+  this.hideFormEvent.emit();
+  console.log("in")
+}
+
+closeForm(): void {
+  this.closeFormEvent.emit();
+}
+
+
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       firstname: ['', [Validators.required, Validators.pattern('[A-Za-z]+')]],
@@ -45,11 +61,6 @@ export class EmployeeFormComponent {
     if (this.employee) {
       this.formGroup.patchValue(this.employee);
     }
-  }
-
-  closeForm(): void {
-    this.formGroup.reset();
-    this.hideForm();
   }
 
   addEmployee(): void {
@@ -81,7 +92,7 @@ export class EmployeeFormComponent {
     this.addEmp.emit(employee);
     this.employeeService.addEmployee(employee);
     this.formGroup.reset();
-    this.closeForm();
+    // this.closeForm();
   }
 
   updateEmployee(): void {
@@ -89,12 +100,15 @@ export class EmployeeFormComponent {
       this.formGroup.markAllAsTouched();
       return;
     }
-
+  
     const updatedEmployee = { ...this.employee, ...this.formGroup.value };
+    console.log('Updated Employee:', updatedEmployee);
     this.employeeService.updateEmployee(updatedEmployee);
-    this.closeForm();
+    this.updateEmp.emit(updatedEmployee);
+    this.hideForm();
   }
-
+  
+  
   validateFname() {
     const firstNameControl = this.formGroup.get('firstname');
     if (firstNameControl?.invalid && (firstNameControl.dirty || firstNameControl.touched)) {

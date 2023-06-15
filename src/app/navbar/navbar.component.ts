@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { EmployeeService } from '../employee.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -20,15 +22,20 @@ export class NavbarComponent {
     this.hideEmployeeForm();
   }
 
+  updateEmployee(updatedEmployee: any): void {
+    this.employeeService.updateEmployee(updatedEmployee);
+  }
+
   showEmployeeForm() {
     this.isFormVisible = true;
+    
   }
 
   hideEmployeeForm() {
     this.isFormVisible = false;
   }
 
-  constructor() {
+  constructor(private employeeService: EmployeeService,private router: Router) {
     this.generateAlphabet();
   }
 

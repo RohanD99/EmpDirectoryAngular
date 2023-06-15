@@ -8,23 +8,23 @@ import { EmployeeService } from '../employee.service';
 })
 export class EmployeeCardComponent {
   @Input() employee: any = [];
-  @Output() editEmpEvent = new EventEmitter<any>();
   editMode: boolean = false;
   isFormVisible: boolean = false;
   isConfirmationVisible: boolean = false;
   confirmationEmployee: any;
- 
-
+  selectedEmployee: any;
+  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private employeeService: EmployeeService) {}
 
-  showEmployeeForm() {
-    this.editMode = !this.editMode;
+  showEmployeeForm(editedEmployee: any): void {
+    this.selectedEmployee = { ...this.employee };
     this.isFormVisible = true;
+    this.editMode = true;
   }
 
-  editEmployee(employee: any): void {
-    this.editEmpEvent.emit(employee);
+  hideForm(): void {
+    this.isFormVisible = false;
   }
 
   deleteEmployee(employee: any): void {
@@ -40,5 +40,12 @@ export class EmployeeCardComponent {
 
   cancelDelete(): void {
     this.isConfirmationVisible = false;
+  }
+
+  updateEmployee(updatedEmployee: any): void {
+    console.log('Updated Employee:', updatedEmployee);
+    this.employeeService.updateEmployee(updatedEmployee);
+    this.updateEmp.emit(updatedEmployee);
+    this.hideForm();
   }
 }

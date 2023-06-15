@@ -10,10 +10,16 @@ export class SidebarComponent {
   departmentCounts: any = [];
   designationCounts: any = [];
   locationCounts: any = [];
+  filteredEmployees: any[] = [];
+  allEmployees: any[] = [];
 
   constructor(private employeeService: EmployeeService) { }
 
   ngOnInit(): void {
+  const employeesFromLocalStorage = localStorage.getItem('employees');
+  if (employeesFromLocalStorage) {
+    this.allEmployees = JSON.parse(employeesFromLocalStorage);
+  }
     this.employeeService.updateCounts();
   
     this.employeeService.departmentCounts$.subscribe(counts => {
@@ -30,10 +36,8 @@ export class SidebarComponent {
   }
 
   filterEmployeesByDepartment(department: string): void {
-    this.employeeService.getEmployeesByDepartment(department)
-      .subscribe((employees: any[]) => {
-        console.log(`Employees in ${department}:`, employees);
-      });
+    this.filteredEmployees = this.allEmployees.filter(employee => employee.department === department);
+    console.log(this.filteredEmployees);
   }
   
 }

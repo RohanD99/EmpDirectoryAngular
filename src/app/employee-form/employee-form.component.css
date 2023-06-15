@@ -53,7 +53,7 @@
 
   }
 
-.add-btn{
+.add-btn,.edit-btn{
     background-color: #00B1FC;
     border-radius: 15px;
     outline: none;
@@ -65,7 +65,7 @@
     position: relative;
 }
 
-.form-container .add-emp-head{
+.form-container .add-emp-head,.edit-emp-head{
     margin-top: 105px;
     font-size: 30px;
 }
@@ -190,4 +190,12 @@
     width: 60%;
     display: flex;
     justify-content: flex-end;
+  }
+
+  .error-message{
+    color: red;
+    margin-top: 33px;
+    margin-left: 180px;
+    font-size: 11px;
+    position: absolute;
   }

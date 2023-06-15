@@ -1,20 +1,20 @@
 <div class="sidebar">
-  <div class="navbar" id="departments">
-    <p class="nav-heading">Departments</p>
+  <div class="navbar" id="departments" >
+    <p class="nav-heading" >Departments</p>
     <div>
-      <a href="" class="nav-element" id="it" (click)="filterEmployeesByDepartment('IT')">IT</a>
+      <a class="nav-element" id="it" (click)="filterEmployeesByDepartment('IT')">IT</a>
       <span class="nav-element" [innerText]="'(' + (departmentCounts['IT'] || 0) + ')'"></span>
     </div>
     <div>
-      <a href="" class="nav-element" id="humanResource" (click)="filterEmployeesByDepartment('Human Resource')">Human Resources</a>
+      <a class="nav-element" id="humanResource" (click)="filterEmployeesByDepartment('Human Resource')">Human Resources</a>
       <span class="nav-element" [innerText]="'(' + (departmentCounts['Human Resources'] || 0) + ')'"></span>
     </div>
     <div>
-      <a href="" class="nav-element" id="mdDept" (click)="filterEmployeesByDepartment('MD')">MD</a>
+      <a class="nav-element" id="mdDept" (click)="filterEmployeesByDepartment('MD')">MD</a>
       <span class="nav-element" [innerText]="'(' + (departmentCounts['MD'] || 0) + ')'"></span>
     </div>
     <div>
-      <a href="" class="nav-element" id="salesDept" (click)="filterEmployeesByDepartment('Sales')">Sales</a>
+      <a class="nav-element" id="salesDept" (click)="filterEmployeesByDepartment('Sales')">Sales</a>
       <span class="nav-element" [innerText]="'(' + (departmentCounts['SALES'] || 0) + ')'"></span>
     </div>
  

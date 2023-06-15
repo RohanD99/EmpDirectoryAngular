@@ -25,12 +25,12 @@
         <option value="department">Department</option>
       </select>
     </div>
-    <button type="button" class="add-emp-btn" (click)="showEmployeeForm()">Add Employee</button>
+    <button type="button" class="add-emp-btn" routerLink="/add" (click)="showEmployeeForm()">Add Employee</button>
   </div>
   <p class="note">
     Note: <span class="note-desc">Please use the advanced filter option to refine your results.</span>
   </p>
 </div>
 
-<app-card-container [employees]="filteredEmployees" [noEmployeesMessage]="noEmployeesMessage"></app-card-container>
-<app-employee-form *ngIf="isFormVisible" (addEmp)="addEmployee($event)"></app-employee-form>
+<app-card-container [employees]="filteredEmployees" [noEmployeesMessage]="noEmployeesMessage" (updateEmp)="updateEmployee($event)"></app-card-container>
+<app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" (addEmp)="addEmployee($event)"(hideFormEvent)="hideEmployeeForm()"></app-employee-form>
