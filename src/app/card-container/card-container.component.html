@@ -1,7 +1,7 @@
 <div class="user-cards" id="userCards" >
     <div id="empCardCont" class="cards">
-      <app-employee-card *ngFor="let employee of employees" [employee]="employee" (editEmployeeEvent)="openForm($event)"></app-employee-card>
-      <app-employee-form *ngIf="showForm()" (addEmp)="addEmployee($event)"></app-employee-form>
+      <app-employee-card *ngFor="let employee of employees" [employee]="employee" ></app-employee-card>
+      <app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" (addEmp)="addEmployee($event)"></app-employee-form>
       <div *ngIf="noEmployeesMessage">{{ noEmployeesMessage }}</div>
     </div>
   </div>
