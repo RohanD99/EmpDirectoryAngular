@@ -1,4 +1,4 @@
-import { Component,Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EmployeeService } from '../employee.service';
 
 @Component({
@@ -6,14 +6,16 @@ import { EmployeeService } from '../employee.service';
   templateUrl: './employee-card.component.html',
   styleUrls: ['./employee-card.component.css']
 })
-
 export class EmployeeCardComponent {
-  @Input() employee: any = {};
+  @Input() employee: any = [];
+  @Output() editEmpEvent = new EventEmitter<any>();
   editMode: boolean = false;
   isFormVisible: boolean = false;
   isConfirmationVisible: boolean = false;
   confirmationEmployee: any;
  
+
+
   constructor(private employeeService: EmployeeService) {}
 
   showEmployeeForm() {
@@ -22,31 +24,17 @@ export class EmployeeCardComponent {
   }
 
   editEmployee(employee: any): void {
-    this.isFormVisible
-    const index = this.employee.findIndex((emp: { preferredName: any; }) => emp.preferredName === employee.preferredName);
-  
-    if (index !== -1) {
-      this.employee[index].firstname = employee.firstname;
-      this.employee[index].lastname = employee.lastname;
-      this.employee[index].designation = employee.designation;
-      this.employee[index].department = employee.department;
-      this.employee[index].mobile = employee.mobile;
-      this.employee[index].mailId = employee.mailId;
-      this.employee[index].location = employee.location;
-      this.employee[index].skypeId = employee.skypeId;
-    }
+    this.editEmpEvent.emit(employee);
   }
-  
+
   deleteEmployee(employee: any): void {
+    console.log('Deleting employee:', employee);
     this.isConfirmationVisible = true;
     this.confirmationEmployee = employee;
   }
 
   confirmDelete(): void {
-    const index = this.employee.findIndex((emp: { preferredName: any;}) => emp.preferredName === this.confirmationEmployee.preferredName);
-    if (index !== -1) {
-      this.employee.splice(index, 1);
-    }
+    this.employeeService.deleteEmployee(this.confirmationEmployee.id);
     this.isConfirmationVisible = false;
   }
 
@@ -54,7 +42,3 @@ export class EmployeeCardComponent {
     this.isConfirmationVisible = false;
   }
 }
-  
-
-  
-

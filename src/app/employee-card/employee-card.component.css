@@ -17,7 +17,7 @@
     padding: 8px;
     margin: 0px;
     margin-bottom: 18px;
-    margin-right: 1%;  
+    margin-right: 35px;
 }
 
 .user-photo{
@@ -95,6 +95,7 @@
     padding: 20px;
     border: 1px solid #ccc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 999; 
   }
   
   .confirmation-popup p {

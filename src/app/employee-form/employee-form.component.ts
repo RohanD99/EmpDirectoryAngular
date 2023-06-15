@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../employee.service';
 
@@ -8,16 +8,28 @@ import { EmployeeService } from '../employee.service';
   styleUrls: ['./employee-form.component.css']
 })
 export class EmployeeFormComponent {
+  @Input() employee: any;
   @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();
   @Output() hideFormEvent = new EventEmitter<void>();
   editMode: boolean = false;
-
+  isFormVisible: boolean = true;
   formGroup!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,private employeeService: EmployeeService) {
-    
+  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['employee']) {
+      this.formGroup.reset();
+      if (this.employee) {
+        this.formGroup.patchValue(this.employee);
+        this.editMode = true;
+      }
+    }
   }
 
+  hideForm(): void {
+    this.hideFormEvent.emit();
+  }
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
       firstname: ['', [Validators.required, Validators.pattern('[A-Za-z]+')]],
@@ -27,15 +39,24 @@ export class EmployeeFormComponent {
       mobile: ['', Validators.required],
       mailId: ['', [Validators.required, Validators.email]],
       location: ['', Validators.required],
-      skypeId: ['', Validators.required]
+      skypeId: ['', Validators.required],
     });
+
+    if (this.employee) {
+      this.formGroup.patchValue(this.employee);
+    }
   }
 
-  closeForm() {
-    this.hideFormEvent.emit();
+  closeForm(): void {
+    this.formGroup.reset();
+    this.hideForm();
   }
 
   addEmployee(): void {
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
     const firstname = this.formGroup.get('firstname')?.value;
     const lastname = this.formGroup.get('lastname')?.value;
     const designation = this.formGroup.get('designation')?.value;
@@ -61,5 +82,71 @@ export class EmployeeFormComponent {
     this.employeeService.addEmployee(employee);
     this.formGroup.reset();
     this.closeForm();
+  }
+
+  updateEmployee(): void {
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
+
+    const updatedEmployee = { ...this.employee, ...this.formGroup.value };
+    this.employeeService.updateEmployee(updatedEmployee);
+    this.closeForm();
+  }
+
+  validateFname() {
+    const firstNameControl = this.formGroup.get('firstname');
+    if (firstNameControl?.invalid && (firstNameControl.dirty || firstNameControl.touched)) {
+      return {
+        'is-invalid': firstNameControl.errors && firstNameControl.errors['required'],
+        'is-valid': firstNameControl.errors && firstNameControl.errors['pattern']
+      };
+    }
+    return {};
+  }
+
+  validateLname() {
+    const lastNameControl = this.formGroup.get('lastname');
+    if (lastNameControl?.invalid && (lastNameControl.dirty || lastNameControl.touched)) {
+      return {
+        'is-invalid': lastNameControl.errors && lastNameControl.errors['required'],
+        'is-valid': lastNameControl.errors && lastNameControl.errors['pattern']
+      };
+    }
+    return {};
+  }
+
+  validatePhone() {
+    const mobileControl = this.formGroup.get('mobile');
+    if (mobileControl?.invalid && (mobileControl.dirty || mobileControl.touched)) {
+      return {
+        'is-invalid': mobileControl.errors && mobileControl.errors['required'],
+        'is-valid': mobileControl.errors && mobileControl.errors['pattern']
+      };
+    }
+    return {};
+  }
+
+  validateMail() {
+    const mailIdControl = this.formGroup.get('mailId');
+    if (mailIdControl?.invalid && (mailIdControl.dirty || mailIdControl.touched)) {
+      return {
+        'is-invalid': mailIdControl.errors && mailIdControl.errors['required'],
+        'is-valid': mailIdControl.errors && mailIdControl.errors['email']
+      };
+    }
+    return {};
+  }
+
+  validateSkype() {
+    const skypeIdControl = this.formGroup.get('skypeId');
+    if (skypeIdControl?.invalid && (skypeIdControl.dirty || skypeIdControl.touched)) {
+      return {
+        'is-invalid': skypeIdControl.errors && skypeIdControl.errors['required'],
+        'is-valid': skypeIdControl.errors && skypeIdControl.errors['pattern']
+      };
+    }
+    return {};
   }
 }

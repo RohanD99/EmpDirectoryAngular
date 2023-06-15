@@ -1,35 +1,36 @@
 <div class="top-nav-container">
-    <div class="alpha-navbar" #alphaNavbar>
-      <button class="alpha-btn user-icon-btn"><i class="fa-solid fa-user"></i></button>
-      <button *ngFor="let character of characters" class="alpha-btn" [id]="'char-' + character.toLowerCase()">
-        {{ character }}
-      </button>
-    </div>
-    <div class="search-filter-add-container">
-      <div class="left-search-cont">
-        <label for="searchInput" class="label-el">Search</label>
-        <div class="search-bar">
-          <i class="fa-solid fa-magnifying-glass search-logo"></i>
-          <input class="search-area" type="search" id="searchInput" name="input" placeholder="Enter any Keyword" />
-        </div>
-        <button class="clear-btn" id="clearAllBtn">Clear All</button>
-        <label for="search-input" class="label-el">Filter by</label>
-        <select class="select-menu" id="filterBy">
-          <option value="preferredName" selected>PreferredName</option>
-          <option value="designation">Designation</option>
-          <option value="department">Department</option>
-        </select>
+  <div class="alpha-navbar" #alphaNavbar>
+    <button class="alpha-btn user-icon-btn"><i class="fa-solid fa-user"></i></button>
+    <button
+      *ngFor="let character of characters"
+      class="alpha-btn"
+      [id]="'char-' + character.toLowerCase()"
+      [class.active]="selectedCharacter === character"
+      (click)="selectCharacter(character)">
+      {{ character }}
+    </button>
+  </div>
+  <div class="search-filter-add-container">
+    <div class="left-search-cont">
+      <label for="searchInput" class="label-el">Search</label>
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass search-logo"></i>
+        <input class="search-area" type="search" id="searchInput" name="input" placeholder="Enter any Keyword" (input)="onSearch($event)"/>
       </div>
-      <button type="button" class="add-emp-btn" (click)="showEmployeeForm()">Add Employee</button>
-
+      <button class="clear-btn" id="clearAllBtn" (click)="onClearAll()">Clear All</button>
+      <label for="search-input" class="label-el">Filter by</label>
+      <select class="select-menu" id="filterBy">
+        <option value="preferredName" selected>PreferredName</option>
+        <option value="designation">Designation</option>
+        <option value="department">Department</option>
+      </select>
     </div>
-    <p class="note">
-      Note: <span class="note-desc">Please use the advanced filter option to refine your results.</span>
-    </p>
+    <button type="button" class="add-emp-btn" (click)="showEmployeeForm()">Add Employee</button>
+  </div>
+  <p class="note">
+    Note: <span class="note-desc">Please use the advanced filter option to refine your results.</span>
+  </p>
 </div>
 
-<app-card-container [employees]="employees" ></app-card-container>
+<app-card-container [employees]="filteredEmployees" [noEmployeesMessage]="noEmployeesMessage"></app-card-container>
 <app-employee-form *ngIf="isFormVisible" (addEmp)="addEmployee($event)"></app-employee-form>
-
-
-

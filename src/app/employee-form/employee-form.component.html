@@ -1,20 +1,20 @@
 <div class="add-employee-popup" id="popupForm">
     <div class="form-popup">
-      <form class="form-container" id="myPopupForm" [formGroup]="formGroup">
+        <form class="form-container" id="myPopupForm" [formGroup]="formGroup">
         <div class="heading-cancel-cont">
           <h5 class="add-emp-head">Add Employee</h5>
           <!-- <h5 class="edit-emp-head">Edit Employee</h5> -->
-          <button type="button" class="btn" (click)="closeForm()">&times;</button>
+          <button type="button" class="btn" (click)="hideForm()">&times;</button>
         </div>
                       
-        <div class="inp-warning-div">
+        <div class="inp-warning-div" [ngClass]="validateFname()">
             <div class="inp-container">
                 <label for="firstName" class="input-label">First name <span id="req" #firstName>*</span></label>
                 <input type="text" id="firstName" class="input-box" placeholder="Enter First Name" formControlName="firstname">        
               </div>
         </div>
 
-        <div class="inp-warning-div">
+        <div class="inp-warning-div" [ngClass]="validateLname()">
             <div class="inp-container">
                 <label for="lastName" class="input-label">Last name<span id="req" #lastName>*</span></label>
                 <input type="text" id="lastName" class="input-box" placeholder="Enter Last Name" formControlName="lastname">
@@ -80,7 +80,7 @@
         </div>
         <div class="btn-container">
             <button *ngIf="!editMode" type="button" name="add-btn" class="add-btn" id="onAddEmpBtn" (click)="addEmployee()">Add</button>
-            <button *ngIf="editMode" type="button" name="edit-btn" class="edit-btn" id="onEditEmpBtn" >Update</button>
+            <button *ngIf="editMode" type="button" name="edit-btn" class="edit-btn" id="onEditEmpBtn" (click)="updateEmployee()">Update</button>
           </div>
       </form>
     </div>

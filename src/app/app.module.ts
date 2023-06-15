@@ -10,6 +10,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { CardContainerComponent } from './card-container/card-container.component';
 import { EmployeeFormComponent } from './employee-form/employee-form.component';
 import { EmployeeCardComponent } from './employee-card/employee-card.component';
+import { EmployeeService } from './employee.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { EmployeeCardComponent } from './employee-card/employee-card.component';
     AppRoutingModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [EmployeeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

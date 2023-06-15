@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-
 export class EmployeeService {
   private readonly localStorageKey = 'employees';
+  setSelectedEmployee: any;
 
   private departmentCounts: BehaviorSubject<any> = new BehaviorSubject<any>({});
   departmentCounts$ = this.departmentCounts.asObservable();
@@ -17,7 +17,7 @@ export class EmployeeService {
   private locationCounts: BehaviorSubject<any> = new BehaviorSubject<any>({});
   locationCounts$ = this.locationCounts.asObservable();
 
-  constructor() { }
+  constructor() {}
 
   generateUniqueId(): number {
     const employees = this.getEmployeesFromLocalStorage();
@@ -43,9 +43,7 @@ export class EmployeeService {
     employee.id = this.generateUniqueId();
     employees.push(employee);
     this.saveEmployees(employees);
-    this.updateCount('departments', this.departmentCounts);
-    this.updateCount('jobTitles', this.designationCounts);
-    this.updateCount('offices',this.locationCounts);
+    this.updateCounts();
   }
 
   updateEmployee(updatedEmployee: any): void {
@@ -54,6 +52,7 @@ export class EmployeeService {
     if (index !== -1) {
       employees[index] = updatedEmployee;
       this.saveEmployees(employees);
+      this.updateCounts();
     }
   }
 
@@ -61,17 +60,43 @@ export class EmployeeService {
     let employees = this.getEmployeesFromLocalStorage();
     employees = employees.filter((employee: any) => employee.id !== employeeId);
     this.saveEmployees(employees);
+    this.updateCounts();
   }
-
+  
   saveEmployees(employees: any[]): void {
     const employeesJson = JSON.stringify(employees);
     localStorage.setItem(this.localStorageKey, employeesJson);
-  } 
-
-  updateCount(elementId: string, countSubject: BehaviorSubject<any>): void {
-    const counts = countSubject.getValue();
-    const currentCount = counts[elementId] || 0;
-    const updatedCounts = { ...counts, [elementId]: `(${currentCount + 1})` };
-    countSubject.next(updatedCounts);
   }
+  
+  updateCounts(): void {
+    const employees = this.getEmployeesFromLocalStorage();
+    const departmentCounts: Record<string, number> = {};
+    const designationCounts: Record<string, number> = {};
+    const locationCounts: Record<string, number> = {};
+  
+    employees.forEach((employee: any) => {
+      const department = employee.department;
+      const designation = employee.designation;
+      const location = employee.location;
+  
+      departmentCounts[department] = (departmentCounts[department] || 0) + 1;
+      designationCounts[designation] = (designationCounts[designation] || 0) + 1;
+      locationCounts[location] = (locationCounts[location] || 0) + 1;
+    });
+  
+    console.log('Department counts:', departmentCounts);
+    console.log('Designation counts:', designationCounts);
+    console.log('Location counts:', locationCounts);
+  
+    this.departmentCounts.next(departmentCounts);
+    this.designationCounts.next(designationCounts);
+    this.locationCounts.next(locationCounts);
+  }
+
+  getEmployeesByDepartment(department: string): Observable<any[]> {
+    const employees = this.getEmployeesFromLocalStorage();
+    const filteredEmployees = employees.filter((employee: any) => employee.department === department);
+    return new BehaviorSubject<any[]>(filteredEmployees).asObservable();
+  }
+  
 }
