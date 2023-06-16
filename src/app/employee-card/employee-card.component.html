@@ -1,7 +1,7 @@
 <div class="user-card" >
   <img class="user-photo" src="assets/profile-pic.jpg">
   <div class="user-descr">
-    <p class="user-name">{{ employee.preferredName }}</p>
+    <p class="user-name">{{ employee.preferredName || employee.firstname + ' ' + employee.lastname }} </p>
     <p class="user-designation">{{ employee.designation }}</p>
     <p class="user-dept">{{ employee.department }}</p>
     <p> </p>
@@ -21,4 +21,4 @@
     <button class="cancel-button" (click)="cancelDelete()">Cancel</button>
   </div>
 </div>
-<app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" [selectedEmployee]="selectedEmployee" [editMode]="editMode" (hideFormEvent)="hideForm()" (updateEmp)="updateEmployee($event)"></app-employee-form>
+<app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" [selectedEmployee]="selectedEmployee" [editMode]="editMode" (hideFormEvent)="hideForm()"></app-employee-form>

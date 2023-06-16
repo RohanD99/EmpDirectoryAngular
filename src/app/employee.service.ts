@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class EmployeeService {
   private readonly localStorageKey = 'employees';
   setSelectedEmployee: any;
@@ -84,19 +85,11 @@ export class EmployeeService {
       locationCounts[location] = (locationCounts[location] || 0) + 1;
     });
   
-    console.log('Department counts:', departmentCounts);
-    console.log('Designation counts:', designationCounts);
-    console.log('Location counts:', locationCounts);
-  
+
     this.departmentCounts.next(departmentCounts);
     this.designationCounts.next(designationCounts);
     this.locationCounts.next(locationCounts);
   }
 
-  getEmployeesByDepartment(department: string): Observable<any[]> {
-    const employees = this.getEmployeesFromLocalStorage();
-    const filteredEmployees = employees.filter((employee: any) => employee.department === department);
-    return new BehaviorSubject<any[]>(filteredEmployees).asObservable();
-  }
-  
+
 }

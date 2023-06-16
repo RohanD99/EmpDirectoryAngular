@@ -199,3 +199,11 @@
     font-size: 11px;
     position: absolute;
   }
+
+  .error-message-btn{
+    color: red;
+    margin-top: -49px;
+    right: 140px;
+    font-size: 11px;
+    position: absolute;
+  }

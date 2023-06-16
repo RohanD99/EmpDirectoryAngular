@@ -12,7 +12,7 @@
     position: relative;
     display: flex;
     height: 110px;
-    width: 250px;
+    width: 270px;
     background-color: #E9E8E8;
     padding: 8px;
     margin: 0px;
@@ -32,20 +32,17 @@
 }
 .user-name{
     padding-top: 5px;
-    padding-left: 10px;
     margin: 0px;
     font-weight: 500;
     color: #534f4f;
 }
 .user-designation{
-    padding-left: 10px;
-    font-size: 13px;
+    font-size: 12px;
     margin: 0px;
     margin-top: 2px;
     color: rgba(0, 0, 0, 0.6);
 }
 .user-dept{
-    padding-left: 10px;
     font-size: 13px;
     margin: 0px;
     color: rgba(0, 0, 0, 0.6);
@@ -77,7 +74,7 @@
 }
 .social-icons{
     margin-top: -38px;
-    padding-left: 5px;
+    margin-left: -5px;
     color: #969595;
 }
 .social-icon{

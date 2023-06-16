@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { EmployeeService } from '../employee.service';
 
 @Component({
@@ -7,23 +7,24 @@ import { EmployeeService } from '../employee.service';
   styleUrls: ['./employee-card.component.css']
 })
 export class EmployeeCardComponent {
-  @Input() employee: any = [];
+  @Input() employee: any = [];                
+  @Input() updatedEmployee: any;
   editMode: boolean = false;
   isFormVisible: boolean = false;
   isConfirmationVisible: boolean = false;
   confirmationEmployee: any;
   selectedEmployee: any;
-  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
+  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();                 //sending to form comp.
 
   constructor(private employeeService: EmployeeService) {}
 
-  showEmployeeForm(editedEmployee: any): void {
+  showEmployeeForm(editedEmployee: any): void {                 //show edit form
     this.selectedEmployee = { ...this.employee };
     this.isFormVisible = true;
     this.editMode = true;
   }
 
-  hideForm(): void {
+  hideForm(): void {                                           //hide edit form
     this.isFormVisible = false;
   }
 
@@ -36,13 +37,14 @@ export class EmployeeCardComponent {
   confirmDelete(): void {
     this.employeeService.deleteEmployee(this.confirmationEmployee.id);
     this.isConfirmationVisible = false;
+    window.location.reload()
   }
 
   cancelDelete(): void {
     this.isConfirmationVisible = false;
   }
 
-  updateEmployee(updatedEmployee: any): void {
+  updateEmployee(updatedEmployee: any): void {    
     console.log('Updated Employee:', updatedEmployee);
     this.employeeService.updateEmployee(updatedEmployee);
     this.updateEmp.emit(updatedEmployee);

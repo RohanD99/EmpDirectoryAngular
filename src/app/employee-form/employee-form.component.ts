@@ -11,40 +11,24 @@ import { Route, Router } from '@angular/router';
 
 export class EmployeeFormComponent {
   @Input() isFormVisible: boolean = false;
-  @Input() employee: any;
-  @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();
-  @Output() hideFormEvent = new EventEmitter<void>();
-  @Input() selectedEmployee: any = {}; 
-  @Input() editMode: boolean = false;
-  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
+  @Input() employee: any;                                          //single emp sending to card-cont
+  @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();   //emiting in emp-card comp.
+  @Output() hideFormEvent = new EventEmitter<void>();      
+  @Input() selectedEmployee: any = {};                              //selected card
+  @Input() editMode: boolean = false;                               //edit form in emp-card comp
+  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();       //updating emp in emp-card comp
   @Output() closeFormEvent = new EventEmitter<void>();
+  addClicked: boolean = false;
 
   formGroup!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService,private router: Router) {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['employee']) {
-      this.formGroup.reset();
-      if (this.employee) {
-        this.formGroup.patchValue(this.employee);
-        this.editMode = true;
-      }else{
-        this.editMode = false;
-      }
-    }
-  }
-
-hideForm(): void {
+  
+  hideForm(): void {
   this.isFormVisible = false
   this.hideFormEvent.emit();
   console.log("in")
 }
-
-closeForm(): void {
-  this.closeFormEvent.emit();
-}
-
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -66,8 +50,10 @@ closeForm(): void {
   addEmployee(): void {
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
+      this.addClicked = true;
       return;
     }
+
     const firstname = this.formGroup.get('firstname')?.value;
     const lastname = this.formGroup.get('lastname')?.value;
     const designation = this.formGroup.get('designation')?.value;
@@ -89,78 +75,26 @@ closeForm(): void {
       preferredName: firstname + ' ' + lastname,
     };
 
-    this.addEmp.emit(employee);
-    this.employeeService.addEmployee(employee);
+    this.addEmp.emit(employee);                       //emiting in emp-card
+    this.employeeService.addEmployee(employee);       //saving in LocalStorage
     this.formGroup.reset();
-    // this.closeForm();
+    window.location.reload()
   }
 
   updateEmployee(): void {
     if (this.formGroup.invalid) {
-      this.formGroup.markAllAsTouched();
+      this.formGroup.markAllAsTouched();         //validate 
       return;
     }
+
+  const selectedEmployeeId = this.selectedEmployee.id;                            //taking ID of selected emp
+  const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };    //retreiving all data of selected emp
+  this.employeeService.updateEmployee(updatedEmployee);                           //updating in Localstorage
+  this.updateEmp.emit(updatedEmployee);
+  this.hideForm();
+  window.location.reload()
+  }
   
-    const updatedEmployee = { ...this.employee, ...this.formGroup.value };
-    console.log('Updated Employee:', updatedEmployee);
-    this.employeeService.updateEmployee(updatedEmployee);
-    this.updateEmp.emit(updatedEmployee);
-    this.hideForm();
-  }
   
   
-  validateFname() {
-    const firstNameControl = this.formGroup.get('firstname');
-    if (firstNameControl?.invalid && (firstNameControl.dirty || firstNameControl.touched)) {
-      return {
-        'is-invalid': firstNameControl.errors && firstNameControl.errors['required'],
-        'is-valid': firstNameControl.errors && firstNameControl.errors['pattern']
-      };
-    }
-    return {};
-  }
-
-  validateLname() {
-    const lastNameControl = this.formGroup.get('lastname');
-    if (lastNameControl?.invalid && (lastNameControl.dirty || lastNameControl.touched)) {
-      return {
-        'is-invalid': lastNameControl.errors && lastNameControl.errors['required'],
-        'is-valid': lastNameControl.errors && lastNameControl.errors['pattern']
-      };
-    }
-    return {};
-  }
-
-  validatePhone() {
-    const mobileControl = this.formGroup.get('mobile');
-    if (mobileControl?.invalid && (mobileControl.dirty || mobileControl.touched)) {
-      return {
-        'is-invalid': mobileControl.errors && mobileControl.errors['required'],
-        'is-valid': mobileControl.errors && mobileControl.errors['pattern']
-      };
-    }
-    return {};
-  }
-
-  validateMail() {
-    const mailIdControl = this.formGroup.get('mailId');
-    if (mailIdControl?.invalid && (mailIdControl.dirty || mailIdControl.touched)) {
-      return {
-        'is-invalid': mailIdControl.errors && mailIdControl.errors['required'],
-        'is-valid': mailIdControl.errors && mailIdControl.errors['email']
-      };
-    }
-    return {};
-  }
-
-  validateSkype() {
-    const skypeIdControl = this.formGroup.get('skypeId');
-    if (skypeIdControl?.invalid && (skypeIdControl.dirty || skypeIdControl.touched)) {
-      return {
-        'is-invalid': skypeIdControl.errors && skypeIdControl.errors['required'],
-        'is-valid': skypeIdControl.errors && skypeIdControl.errors['pattern']
-      };
-    }
-    return {};
-  }
 }

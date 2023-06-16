@@ -9,13 +9,13 @@ import { Router } from '@angular/router';
 })
 
 export class NavbarComponent {
-  filteredEmployees: any = {};
-  characters: string[] = [];
-  isFormVisible: boolean = false;
-  @Input() employees: any[] = [];
-  selectedCharacter: string = '';
-  searchValue: string = '';
-  noEmployeesMessage: string = '';
+  filteredEmployees: any = {};   //filtering emp based on filter
+  characters: string[] = [];       //selected char on button
+  isFormVisible: boolean = false; 
+  @Input() employees: any[] = [];    //send to card-cont.
+  selectedCharacter: string = '';    //firstly empty char string
+  searchValue: string = '';          //firstly empty searchVal string
+  noEmployeesMessage: string = '';   //Displaying in card-cont
 
   addEmployee(employee: any): void {
     this.employees.push(employee);
@@ -39,7 +39,7 @@ export class NavbarComponent {
     this.generateAlphabet();
   }
 
-  generateAlphabet() {
+  generateAlphabet() {                     //Generating alphabets button
     const startCharCode = 'A'.charCodeAt(0);
     const endCharCode = 'Z'.charCodeAt(0);
 
@@ -92,16 +92,13 @@ export class NavbarComponent {
   }
   
   //Alphabets button
-    filterEmployees(): void {
-    console.log('Selected character:', this.selectedCharacter);
-
+  filterEmployees(): void {
     const employeesFromLocalStorageString = localStorage.getItem('employees');
     const employeesFromLocalStorage = employeesFromLocalStorageString ? JSON.parse(employeesFromLocalStorageString) : [];
   
     this.filteredEmployees = employeesFromLocalStorage.filter((employee: { preferredName: string }) => {
       const startsWithCharacter = !this.selectedCharacter ||
         employee.preferredName.charAt(0).toLowerCase() === this.selectedCharacter.toLowerCase();
-  
       console.log('Employee:', employee);
       console.log('Starts with character:', startsWithCharacter);
   
@@ -117,8 +114,14 @@ export class NavbarComponent {
     }
   }
   
+  
+  
+  
+  
+  
+  
+  
 }
   
   
-
 

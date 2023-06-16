@@ -10,42 +10,29 @@ import { FormGroup } from '@angular/forms';
 })
 
 export class CardContainerComponent {
-@Input() employees: any[] = [];
-@Input() noEmployeesMessage: string = '';
+@Input() employees: any[] = [];                  //sending to emp-card cont.             
+@Input() noEmployeesMessage: string = '';        //displaying msg  
 isFormVisible: boolean = false;
-selectedEmployee: any;
+selectedEmployee: any;                           //selected emp in emp-card comp.
 formGroup!: FormGroup;
 
-  showEditForm(employee: any): void {
-    this.selectedEmployee = employee;
-    this.isFormVisible = true;
-  }
+
 constructor(private router: Router,private employeeService: EmployeeService) { }
 
 openForm(employee: any): void {
   this.selectedEmployee = employee;
 }
 
-ngOnChanges(changes: SimpleChanges) {
-  if (changes['employee']) {
-    this.formGroup.reset();
-    if (this.employees) {
-      this.formGroup.patchValue(this.employees);
-    }
-  }
-}
 ngOnInit() {
-  this.loadEmployees();
+  this.loadEmployees();                 //load emp from localStorage
 }
 
 loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();
 }
 
-
-
 addEmployee(employee: any): void {
-  this.employees.push(employee);
+  this.employees.push(employee);                   //push data to emp-card comp
   this.employeeService.addEmployee(employee);
 }
 
