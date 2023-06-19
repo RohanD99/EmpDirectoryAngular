@@ -11,7 +11,6 @@ import { CardContainerComponent } from './card-container/card-container.componen
 import { EmployeeFormComponent } from './employee-form/employee-form.component';
 import { EmployeeCardComponent } from './employee-card/employee-card.component';
 import { EmployeeService } from './employee.service';
-import { Subscription } from 'rxjs';
 
 @NgModule({
   declarations: [
