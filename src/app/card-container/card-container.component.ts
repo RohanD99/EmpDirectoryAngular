@@ -15,7 +15,7 @@ export class CardContainerComponent {
 isFormVisible: boolean = false;
 selectedEmployee: any;                           //selected emp in emp-card comp.
 formGroup!: FormGroup;
-
+filteredEmployees: any[] = [];
 
 constructor(private router: Router,private employeeService: EmployeeService) { }
 
@@ -27,6 +27,12 @@ ngOnInit() {
   this.loadEmployees();                 //load emp from localStorage
 }
 
+ngOnChanges(changes: SimpleChanges) {
+  if (changes['employees']) {
+    this.filteredEmployees = this.employees; // Update filteredEmployees whenever employees change
+  }
+}
+
 loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();
 }
@@ -34,6 +40,10 @@ loadEmployees() {
 addEmployee(employee: any): void {
   this.employees.push(employee);                   //push data to emp-card comp
   this.employeeService.addEmployee(employee);
+}
+
+deleteEmployee(employeeId: number) {
+  this.employees = this.employees.filter((employee: any) => employee.id !== employeeId);
 }
 
 }

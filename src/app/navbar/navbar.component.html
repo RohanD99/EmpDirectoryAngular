@@ -1,6 +1,6 @@
 <div class="top-nav-container">
   <div class="alpha-navbar" #alphaNavbar>
-    <button class="alpha-btn user-icon-btn"><i class="fa-solid fa-user"></i></button>
+    <button class="alpha-btn user-icon-btn" ><i class="fa-solid fa-user" (click)="showAllEmployees()"></i></button>
     <button
       *ngFor="let character of characters"
       class="alpha-btn"
@@ -32,5 +32,5 @@
   </p>
 </div>
 
-<app-card-container [employees]="filteredEmployees" [noEmployeesMessage]="noEmployeesMessage" ></app-card-container>
+<app-card-container [noEmployeesMessage]="noEmployeesMessage"></app-card-container>
 <app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" (addEmp)="addEmployee($event)"(hideFormEvent)="hideEmployeeForm()"></app-employee-form>

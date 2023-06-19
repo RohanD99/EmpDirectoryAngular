@@ -1,57 +1,31 @@
 <div class="sidebar">
-  <div class="navbar" id="departments" >
-    <p class="nav-heading" >Departments</p>
-    <div>
-      <a class="nav-element" id="it" (click)="filterEmployeesByDepartment('IT')">IT</a>
-      <span class="nav-element" [innerText]="'(' + (departmentCounts['IT'] || 0) + ')'"></span>
-    </div>
-    <div>
-      <a class="nav-element" id="humanResource" (click)="filterEmployeesByDepartment('Human Resource')">Human Resources</a>
-      <span class="nav-element" [innerText]="'(' + (departmentCounts['Human Resources'] || 0) + ')'"></span>
-    </div>
-    <div>
-      <a class="nav-element" id="mdDept" (click)="filterEmployeesByDepartment('MD')">MD</a>
-      <span class="nav-element" [innerText]="'(' + (departmentCounts['MD'] || 0) + ')'"></span>
-    </div>
-    <div>
-      <a class="nav-element" id="salesDept" (click)="filterEmployeesByDepartment('Sales')">Sales</a>
-      <span class="nav-element" [innerText]="'(' + (departmentCounts['SALES'] || 0) + ')'"></span>
-    </div>
- 
-    </div>
-    <div class="navbar" id="offices">
-      <p class="nav-heading">Offices</p>
-      <div>
-        <a class="nav-element">Seattle</a>
-        <span class="nav-element" [innerText]="'(' + (locationCounts['Seattle'] || 0) + ')'"></span>
-      </div>
-      <div>
-        <a class="nav-element">India</a>
-        <span class="nav-element" [innerText]="'(' + (locationCounts['India'] || 0) + ')'"></span>
-      </div>
-    </div>
-    <div class="navbar" id="jobTitles">
-      <p class="nav-heading">Job Titles</p>
-      <div>
-        <a class="nav-element">SharePoint Practice Head</a>
-        <span class="nav-element" [innerText]="'(' + (designationCounts['SharePoint Practice Head'] || 0) + ')'"></span>
-      </div>
-      <div>
-        <a class="nav-element">.Net Development Lead</a>
-        <span class="nav-element" [innerText]="'(' + (designationCounts['.Net Development Lead'] || 0) + ')'"></span>
-      </div>
-      <div>
-        <a class="nav-element">Recruiting Expert</a>
-        <span class="nav-element" [innerText]="'(' + (designationCounts['Recruiting Expert'] || 0) + ')'"></span>
-      </div>
-      <div>
-        <a class="nav-element">Bi Developer</a>
-        <span class="nav-element" [innerText]="'(' + (designationCounts['Bi Developer'] || 0) + ')'"></span>
-      </div>
-      <div>
-        <a class="nav-element">Business Analyst</a>
-        <span class="nav-element" [innerText]="'(' + (designationCounts['Business Analyst'] || 0) + ')'"></span>
-      </div>
+  <div class="navbar" id="departments">
+    <p class="nav-heading">Departments</p>
+    <div *ngFor="let department of departments">
+      <a class="nav-element" [id]="department.id" (click)="filterEmployeesByDepartment(department.name)">{{ department.displayName }}</a>
+      <span class="nav-element" [innerText]="'(' + (departmentCounts[department.name] || 0) + ')'"></span>
     </div>
   </div>
-  
+
+  <div class="navbar" id="offices">
+    <p class="nav-heading">Offices</p>
+    <div *ngFor="let office of offices">
+      <a class="nav-element" [id]="office.name" (click)="filterEmployeesByOffice(office.name)">{{ office.displayName }}</a>
+      <span class="nav-element" [innerText]="'(' + (locationCounts[office.name] || 0) + ')'"></span>
+    </div>
+  </div>
+
+  <div class="navbar" id="jobTitles">
+    <p class="nav-heading">Job Titles</p>
+    <div *ngFor="let jobTitle of jobTitles">
+      <a class="nav-element" [id]="jobTitle.name" (click)="filterEmployeesByJobTitle(jobTitle.name)">{{ jobTitle.displayName }}</a>
+      <span class="nav-element" [innerText]="'(' + (designationCounts[jobTitle.name] || 0) + ')'"></span>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="user-cards" id="userCards">
+  <div id="empCardCont" class="cards">
+    <app-employee-card *ngFor="let employee of filteredEmployees" [employee]="employee"></app-employee-card>
+  </div>
+</div> -->

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../employee.service';
 import { Route, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-employee-form',
@@ -19,7 +20,7 @@ export class EmployeeFormComponent {
   @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();       //updating emp in emp-card comp
   @Output() closeFormEvent = new EventEmitter<void>();
   addClicked: boolean = false;
-
+  
   formGroup!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService,private router: Router) {}
@@ -75,11 +76,11 @@ export class EmployeeFormComponent {
       preferredName: firstname + ' ' + lastname,
     };
 
-    this.addEmp.emit(employee);                       //emiting in emp-card
-    this.employeeService.addEmployee(employee);       //saving in LocalStorage
+    this.addEmp.emit(employee);
+    this.employeeService.addEmployee(employee);
     this.formGroup.reset();
-    window.location.reload()
   }
+  
 
   updateEmployee(): void {
     if (this.formGroup.invalid) {

@@ -1,5 +1,4 @@
 .add-employee-popup {
-   
     position: fixed; 
     z-index: 999; 
     padding-top: 100px; 
@@ -9,6 +8,7 @@
     height: 100%; 
     overflow: auto;  
   }
+
   .form-popup { 
     position: relative;
     left: 40%;
@@ -149,9 +149,8 @@
     border: 1px solid #373b37;
     right: 20px;
     position: absolute;
-    
     border-radius: 5px;
-    width: 40%;
+    width: 150px;
     height: 30px;
   }
 

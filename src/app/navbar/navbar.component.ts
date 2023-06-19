@@ -49,6 +49,12 @@ export class NavbarComponent {
     }
   }
 
+  showAllEmployees(): void {
+    console.log("clciked")
+    this.selectedCharacter = '';
+    this.filterEmployees();
+  }
+
   //Search bar 
   onSearch(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -87,9 +93,14 @@ export class NavbarComponent {
   }
   
   selectCharacter(character: string): void {
-    this.selectedCharacter = character === this.selectedCharacter ? '' : character;
-    this.filterEmployees();
+    if (this.selectedCharacter === character) {
+      this.selectedCharacter = '';
+    } else {
+      this.selectedCharacter = character;
+      this.filterEmployees();
+    }
   }
+  
   
   //Alphabets button
   filterEmployees(): void {

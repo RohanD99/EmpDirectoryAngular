@@ -21,6 +21,7 @@
 
 .navbar .nav-element:hover{
     color: #201e1e;
+    cursor: pointer;
 }
 
 .nav-heading{

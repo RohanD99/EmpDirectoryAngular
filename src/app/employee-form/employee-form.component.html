@@ -74,7 +74,7 @@
         <div class="inp-warning-div">
             <div class="inp-container">
               <label for="mobileNo" class="input-label">Mobile<span id="req" #mobile>*</span></label>
-              <input type="text" id="mobileNo" class="input-box" placeholder="Enter Mobile Number" maxlength="13" formControlName="mobile" [(ngModel)]="selectedEmployee.mobile">
+              <input type="number" id="mobileNo" class="input-box" placeholder="Enter Mobile Number" maxlength="13" formControlName="mobile" [(ngModel)]="selectedEmployee.mobile">
               <div class="input-icon">
                 <div class="success-icon" *ngIf="formGroup.get('mobile')?.valid && formGroup.get('mobile')?.dirty">
                   <i class="fa-solid fa-circle-check"></i>
