@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, Input, SimpleChanges } from '@angular/
 import { Router } from '@angular/router';
 import { EmployeeService } from '../employee.service';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-card-container',
@@ -17,10 +17,17 @@ isFormVisible: boolean = false;
 selectedEmployee: any;                           //selected emp in emp-card comp.
 formGroup!: FormGroup;
 @Input() filteredEmployees: any[] = [];
-employees$: Observable<any[]>;
+private employeesSubscription: Subscription;
+private allEmployees: any[] = [];
 
 constructor(private router: Router,private employeeService: EmployeeService) { 
-  this.employees$ = this.employeeService.employees$;
+  this.employeesSubscription = this.employeeService.employees$.subscribe(employees => {
+    this.allEmployees = employees;
+  });
+}
+
+ngOnDestroy() {
+  this.employeesSubscription.unsubscribe();
 }
 
 openForm(employee: any): void {
@@ -34,11 +41,6 @@ ngOnInit() {
 loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();
 }
-
-// addEmployee(employee: any): void {
-//   this.employees.push(employee);                   //push data to emp-card comp
-//   this.employeeService.addEmployee(employee);
-// }
 
 deleteEmployee(employeeId: number) {
   this.employees = this.employees.filter((employee: any) => employee.id !== employeeId);

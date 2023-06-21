@@ -8,37 +8,44 @@ import { EmployeeService } from '../employee.service';
 })
 
 export class EmployeeDirectoryContainerComponent implements OnInit {
-  // employees: any[] = [];
   isFormVisible: boolean = false;
   selectedEmployee: any = {};
   editMode: boolean = false;
-  employees: any[] = [];                         //sending to emp-card cont.             
-  @Input() noEmployeesMessage: string = '';        //displaying msg  
+  employees: any[] = [];
+  @Input() noEmployeesMessage: string = '';
   filteredEmployees: any[] = [];
+  selectedAlphabet: string = '';
+  searchTerm: string = '';
+  filterredEmployees: any[] = [];
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService) { 
+    const storedAlphabet = localStorage.getItem('selectedAlphabet');
+    if (storedAlphabet) {
+      this.selectedAlphabet = storedAlphabet;
+    }
+
+    const storedSearchTerm = localStorage.getItem('searchTerm');
+    if (storedSearchTerm) {
+      this.searchTerm = storedSearchTerm;
+    }
+  }
 
   ngOnInit() {
+    this.employeeService.employees$.subscribe((employees: any[]) => {
+      this.employees = employees;
+      this.filteredEmployees = employees;
+      this.filterredEmployees = employees;
+    });
+
     this.getEmployees();
   }
 
-  filterEmployees(criteria: string): void {
-    this.filteredEmployees = this.employees.filter(employee => employee.name.includes(criteria));
-  }
-
   getEmployees() {
-    this.employees = this.employeeService.getEmployeesFromLocalStorage();
+    this.employeeService.getEmployeesFromLocalStorage();
   }
 
   updateFilteredEmployees(filteredEmployees: any[]): void {
     this.filteredEmployees = filteredEmployees;
-  }
-  
-
-  showEmployeeForm() {
-    this.isFormVisible = true;
-    this.editMode = false;
-    this.selectedEmployee = null;
   }
 
   hideEmployeeForm() {
@@ -48,26 +55,25 @@ export class EmployeeDirectoryContainerComponent implements OnInit {
   }
 
   addEmployee(employee: any) {
-    debugger
     this.employeeService.addEmployee(employee);
-    this.getEmployees();
     this.hideEmployeeForm();
-  
   }
 
   updateEmployee(employee: any) {
     this.employeeService.updateEmployee(employee);
-    this.getEmployees();
     this.hideEmployeeForm();
   }
-  
+
   handleFilteredEmployees(filteredEmployees: any[]): void {
+    
     this.filteredEmployees = filteredEmployees;
     console.log(filteredEmployees);
   }
+
 
   handleNavbarFilteredEmployees(filteredEmployees: any[]): void {
     this.filteredEmployees = filteredEmployees;
   }
   
+ 
 }

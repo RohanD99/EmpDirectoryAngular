@@ -19,7 +19,7 @@
       <button class="clear-btn" id="clearAllBtn" (click)="onClearAll()">Clear All</button>
       <label for="search-input" class="label-el">Filter by</label>
       <select class="select-menu" id="filterBy">
-        <option value="preferredName" selected>PreferredName</option>
+        <option value="firstname" selected>PreferredName</option>
         <option value="designation">Designation</option>
         <option value="department">Department</option>
       </select>
@@ -30,8 +30,7 @@
     Note: <span class="note-desc">Please use the advanced filter option to refine your results.</span>
   </p>
 
-
 <!-- <app-card-container [noEmployeesMessage]="noEmployeesMessage"></app-card-container> -->
 <app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" (addEmp)="addEmployee($event)"(hideFormEvent)="hideEmployeeForm()"></app-employee-form>
-
+<!-- <app-card-container [employees]="filtereddEmployees" [noEmployeesMessage]="noEmployeesMessage"></app-card-container> -->
 

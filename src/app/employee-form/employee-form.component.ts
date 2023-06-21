@@ -8,26 +8,28 @@ import { Route, Router } from '@angular/router';
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.css']
 })
-
 export class EmployeeFormComponent {
   @Input() isFormVisible: boolean = false;
-  @Input() employee: any;                                          //single emp sending to card-cont
-  @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();   //emiting in emp-card comp.
-  @Output() hideFormEvent = new EventEmitter<void>();      
-  @Input() selectedEmployee: any = {};                              //selected card
-  @Input() editMode: boolean = false;                               //edit form in emp-card comp
-  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();       //updating emp in emp-card comp
+  @Input() employee: any;
+  @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();
+  @Output() hideFormEvent = new EventEmitter<void>();
+  @Input() selectedEmployee: any = {};
+  @Input() editMode: boolean = false;
+  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
   addClicked: boolean = false;
-  
+
   formGroup!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService,private router: Router) {}
-  
+  constructor(
+    private formBuilder: FormBuilder,
+    private employeeService: EmployeeService,
+    private router: Router
+  ) { }
+
   hideForm(): void {
-  this.isFormVisible = false
-  this.hideFormEvent.emit();
-  console.log("in")
-}
+    this.isFormVisible = false;
+    this.hideFormEvent.emit();
+  }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -73,25 +75,23 @@ export class EmployeeFormComponent {
       skypeId: skypeId,
       preferredName: firstname + ' ' + lastname,
     };
-   
+
     this.addEmp.emit(employee);
     this.employeeService.addEmployee(employee);
     this.formGroup.reset();
   }
-  
 
   updateEmployee(): void {
     if (this.formGroup.invalid) {
-      this.formGroup.markAllAsTouched();         //validate 
+      this.formGroup.markAllAsTouched();
       return;
     }
 
-  const selectedEmployeeId = this.selectedEmployee.id;                            //taking ID of selected emp
-  const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };    //retreiving all data of selected emp
-  this.employeeService.updateEmployee(updatedEmployee);                           //updating in Localstorage
-  this.updateEmp.emit(updatedEmployee);
-  this.hideForm();
-  window.location.reload()
+    const selectedEmployeeId = this.selectedEmployee.id;
+    const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };
+    this.employeeService.updateEmployee(updatedEmployee);
+    this.updateEmp.emit(updatedEmployee);
+    this.hideForm();
+    
   }
-  
 }
