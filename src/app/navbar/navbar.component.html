@@ -1,4 +1,3 @@
-<div class="top-nav-container">
   <div class="alpha-navbar" #alphaNavbar>
     <button class="alpha-btn user-icon-btn" ><i class="fa-solid fa-user" (click)="showAllEmployees()"></i></button>
     <button
@@ -30,7 +29,9 @@
   <p class="note">
     Note: <span class="note-desc">Please use the advanced filter option to refine your results.</span>
   </p>
-</div>
 
-<app-card-container [noEmployeesMessage]="noEmployeesMessage"></app-card-container>
+
+<!-- <app-card-container [noEmployeesMessage]="noEmployeesMessage"></app-card-container> -->
 <app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" (addEmp)="addEmployee($event)"(hideFormEvent)="hideEmployeeForm()"></app-employee-form>
+
+

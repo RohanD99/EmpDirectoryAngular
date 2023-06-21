@@ -25,6 +25,8 @@ export class EmployeeService {
     this.updateCounts();
   }
 
+  
+
   generateUniqueId(): number {
     const employees = this.getEmployeesFromLocalStorage();
     let maxId = 0;
@@ -44,10 +46,13 @@ export class EmployeeService {
     return employeesJson ? JSON.parse(employeesJson) : [];
   }
 
+
   private saveEmployeesToLocalStorage(employees: any[]): void {
     const employeesJson = JSON.stringify(employees);
     localStorage.setItem(this.localStorageKey, employeesJson);
   }
+
+
 
   private emitEmployees(): void {
     this.employeesSubject.next(this.allEmployees);
@@ -100,4 +105,9 @@ export class EmployeeService {
     this.designationCounts.next(designationCounts);
     this.locationCounts.next(locationCounts);
   }
+  
+  updateEmployees(employees: any[]): void {
+    this.employeesSubject.next(employees);
+  }
+
 }

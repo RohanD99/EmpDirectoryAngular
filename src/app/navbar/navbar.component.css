@@ -4,13 +4,7 @@
     flex-direction: column;
 }
 
-.top-nav-container{
-    margin-left: 230px;
-    display: flex;
-    flex-direction: column;
-    width: 83%;
-    margin-top: -460px;
-}
+
 .alpha-navbar{
     display: flex;
     justify-content: space-between;

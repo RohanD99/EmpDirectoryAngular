@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { EmployeeService } from '../employee.service';
-import { CardContainerComponent } from '../card-container/card-container.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,14 +12,14 @@ export class SidebarComponent {
   locationCounts: any = [];
   allEmployees: any[] = [];
   selectedDepartment: string = '';
-  filteredEmployees: any[] = []; // Add the declaration of filteredEmployees property
+  filteredEmployees: any[] = [];                           // Add the declaration of filteredEmployees property
   @Output() filteredEmployees$: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   departments = [
     { id: 'it', name: 'IT', displayName: 'IT' },
     { id: 'humanResource', name: 'Human Resources', displayName: 'Human Resources' },
     { id: 'mdDept', name: 'MD', displayName: 'MD' },
-    { id: 'salesDept', name: 'Sales', displayName: 'Sales' },
+    { id: 'salesDept', name: 'SALES', displayName: 'Sales' },
   ];
 
   offices = [
@@ -59,18 +58,18 @@ export class SidebarComponent {
   }
 
   filterEmployeesByDepartment(department: string): void {
-    this.selectedDepartment = department;
     const filteredEmployees = this.allEmployees.filter(employee => employee.department === department);
     this.filteredEmployees$.emit(filteredEmployees);
   }
   
   filterEmployeesByOffice(office: string): void {
-    this.filteredEmployees = this.allEmployees.filter(employee => employee.location === office);
-    this.filteredEmployees$.emit(this.filteredEmployees);
+    const filteredEmployees = this.allEmployees.filter(employee => employee.location === office);
+    this.filteredEmployees$.emit(filteredEmployees);
   }
-
+  
   filterEmployeesByJobTitle(jobTitle: string): void {
-    this.filteredEmployees = this.allEmployees.filter(employee => employee.designation === jobTitle);
-    this.filteredEmployees$.emit(this.filteredEmployees);
+    const filteredEmployees = this.allEmployees.filter(employee => employee.designation === jobTitle);
+    this.filteredEmployees$.emit(filteredEmployees);
   }
+  
 }

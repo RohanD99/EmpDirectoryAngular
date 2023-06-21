@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, Input, SimpleChanges } from '@angular/
 import { Router } from '@angular/router';
 import { EmployeeService } from '../employee.service';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-card-container',
@@ -10,37 +11,34 @@ import { FormGroup } from '@angular/forms';
 })
 
 export class CardContainerComponent {
-@Input() employees: any[] = [];                  //sending to emp-card cont.             
+@Input() employees: any[] = [];                  //sending to emp-card comp.             
 @Input() noEmployeesMessage: string = '';        //displaying msg  
 isFormVisible: boolean = false;
 selectedEmployee: any;                           //selected emp in emp-card comp.
 formGroup!: FormGroup;
-filteredEmployees: any[] = [];
+@Input() filteredEmployees: any[] = [];
+employees$: Observable<any[]>;
 
-constructor(private router: Router,private employeeService: EmployeeService) { }
+constructor(private router: Router,private employeeService: EmployeeService) { 
+  this.employees$ = this.employeeService.employees$;
+}
 
 openForm(employee: any): void {
   this.selectedEmployee = employee;
 }
 
 ngOnInit() {
-  this.loadEmployees();                 //load emp from localStorage
-}
-
-ngOnChanges(changes: SimpleChanges) {
-  if (changes['employees']) {
-    this.filteredEmployees = this.employees; // Update filteredEmployees whenever employees change
-  }
+  this.loadEmployees();               //load emp from localStorage
 }
 
 loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();
 }
 
-addEmployee(employee: any): void {
-  this.employees.push(employee);                   //push data to emp-card comp
-  this.employeeService.addEmployee(employee);
-}
+// addEmployee(employee: any): void {
+//   this.employees.push(employee);                   //push data to emp-card comp
+//   this.employeeService.addEmployee(employee);
+// }
 
 deleteEmployee(employeeId: number) {
   this.employees = this.employees.filter((employee: any) => employee.id !== employeeId);
