@@ -2,7 +2,7 @@
   <div class="navbar" id="departments">
     <p class="nav-heading">Departments</p>
     <div *ngFor="let department of departments">
-      <a class="nav-element" [id]="department.id" (click)="filterEmployeesByDepartment(department.name)">{{ department.displayName }}</a>
+      <a class="nav-element" routerlink="/department" [id]="department.id" (click)="filterEmployeesByDepartment(department.name)">{{ department.displayName }}</a>
       <span class="nav-element" [innerText]="'(' + (departmentCounts[department.name] || 0) + ')'"></span>
     </div>
   </div>
@@ -10,7 +10,7 @@
   <div class="navbar" id="offices">
     <p class="nav-heading">Offices</p>
     <div *ngFor="let office of offices">
-      <a class="nav-element" [id]="office.name" (click)="filterEmployeesByOffice(office.name)">{{ office.displayName }}</a>
+      <a class="nav-element" routerlink="/offices" [id]="office.name" (click)="filterEmployeesByOffice(office.name)">{{ office.displayName }}</a>
       <span class="nav-element" [innerText]="'(' + (locationCounts[office.name] || 0) + ')'"></span>
     </div>
   </div>
@@ -18,7 +18,7 @@
   <div class="navbar" id="jobTitles">
     <p class="nav-heading">Job Titles</p>
     <div *ngFor="let jobTitle of jobTitles">
-      <a class="nav-element" [id]="jobTitle.name" (click)="filterEmployeesByJobTitle(jobTitle.name)">{{ jobTitle.displayName }}</a>
+      <a class="nav-element" routerlink="/jobTitles" [id]="jobTitle.name" (click)="filterEmployeesByJobTitle(jobTitle.name)">{{ jobTitle.displayName }}</a>
       <span class="nav-element" [innerText]="'(' + (designationCounts[jobTitle.name] || 0) + ')'"></span>
     </div>
   </div>

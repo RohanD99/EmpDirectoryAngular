@@ -49,6 +49,7 @@ export class EmployeeFormComponent {
   }
 
   addEmployee(): void {
+    // this.router.navigateByUrl(['/add'])
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       this.addClicked = true;

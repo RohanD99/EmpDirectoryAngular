@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class EmployeeService {
   private readonly localStorageKey = 'employees';
   private allEmployees: any[] = [];
@@ -39,6 +40,45 @@ export class EmployeeService {
     return maxId + 1;
   }
 
+  // generateUniqueId(): string {
+  //   const timestamp: number = new Date().getTime();
+  //   const uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char: string) => {
+  //     const randomValue: number = (timestamp + Math.random() * 16) % 16 | 0;
+  //     timestamp Math.floor(timestamp / 16);
+  //     return (char === 'x' ? randomValue : (randomValue & 0x3) | 0x8).toString(16);
+  //   });
+  //   return uuid;
+  // }
+  
+
+//  generateUniqueId(): string {
+//     const now = new Date();
+//     const uniqueId = now.getTime().toString();
+    
+//     const employeesFromLocalStorageString = localStorage.getItem('employees');
+//     const employeesFromLocalStorage = employeesFromLocalStorageString ? JSON.parse(employeesFromLocalStorageString) : [];
+    
+//     const idExists = employeesFromLocalStorage.some((employee: { id: string }) => employee.id === uniqueId);
+//     if (idExists) {
+//       // If the generated ID already exists, recursively call the function again to generate a new ID
+//       return this.generateUniqueId();
+//     }
+    
+//     return uniqueId;
+//   }
+  
+
+  // generateUniqueId(): number {
+  //   let count = 0;
+  
+  
+  //   if (employees && employees.length > 0) {
+  //     count = employees.length;
+  //   }
+  
+  //   return count + 1;
+  // }
+
   getEmployeesFromLocalStorage(): any[] {
     const employeesJson = localStorage.getItem(this.localStorageKey);
     return employeesJson ? JSON.parse(employeesJson) : [];
@@ -54,7 +94,7 @@ export class EmployeeService {
   }
 
   addEmployee(employee: any): void {
-    employee.id = this.generateUniqueId();
+    // employee.id = this.generateUniqueId();
     this.allEmployees.push(employee);
     this.saveEmployeesToLocalStorage(this.allEmployees);
     this.updateCounts();

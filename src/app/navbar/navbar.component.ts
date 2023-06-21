@@ -116,6 +116,7 @@ export class NavbarComponent {
 
   showEmployeeForm() {
     this.isFormVisible = true;
+    this.router.navigateByUrl('/add');
   }
 
   hideEmployeeForm() {

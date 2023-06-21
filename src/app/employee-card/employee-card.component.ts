@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { EmployeeService } from '../employee.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-card',
@@ -19,7 +20,7 @@ export class EmployeeCardComponent {
   @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();   //sending to form comp.
   @Output() employeeDeleted: EventEmitter<void> = new EventEmitter<void>();   
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(private employeeService: EmployeeService,private router: Router) {}
 
   showEditForm(){
     this.editMode = false;
@@ -30,6 +31,7 @@ export class EmployeeCardComponent {
     this.selectedEmployee = { ...this.employee };
     this.isFormVisible = true;
     this.editMode = true;
+    this.router.navigateByUrl('/edit/:id');
   }
 
   hideForm(): void {                                           //hide edit form
@@ -40,6 +42,7 @@ export class EmployeeCardComponent {
     console.log('Deleting employee:', employee);
     this.isConfirmationVisible = true;
     this.confirmationEmployee = employee;
+    this.router.navigateByUrl('/delete/:id');
   }
 
   confirmDelete(): void {

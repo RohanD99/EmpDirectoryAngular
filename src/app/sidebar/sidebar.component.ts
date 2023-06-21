@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { EmployeeService } from '../employee.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
+
 export class SidebarComponent {
   departmentCounts: any = [];
   designationCounts: any = [];
@@ -35,7 +37,7 @@ export class SidebarComponent {
     { name: 'Business Analyst', displayName: 'Business Analyst' }
   ];
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService,private router: Router) { }
 
   ngOnInit(): void {
     const employeesFromLocalStorage = localStorage.getItem('employees');
@@ -60,16 +62,18 @@ export class SidebarComponent {
   filterEmployeesByDepartment(department: string): void {
     const filteredEmployees = this.allEmployees.filter(employee => employee.department === department);
     this.filteredEmployees$.emit(filteredEmployees);
+    this.router.navigateByUrl('/department');
   }
   
   filterEmployeesByOffice(office: string): void {
     const filteredEmployees = this.allEmployees.filter(employee => employee.location === office);
     this.filteredEmployees$.emit(filteredEmployees);
+    this.router.navigateByUrl('/offices')
   }
   
   filterEmployeesByJobTitle(jobTitle: string): void {
     const filteredEmployees = this.allEmployees.filter(employee => employee.designation === jobTitle);
     this.filteredEmployees$.emit(filteredEmployees);
-  }
-  
+    this.router.navigateByUrl('/jobTitles')
+  } 
 }
