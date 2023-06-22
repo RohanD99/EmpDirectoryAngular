@@ -1,7 +1,14 @@
-    <div id="empCardCont" class="cards">
+    <!-- <div id="empCardCont" class="cards">
        <app-employee-card *ngFor="let employee of employees" [employee]="employee"></app-employee-card>
-      <!-- <app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible" (addEmp)="addEmployee($event)"></app-employee-form>
-      <div *ngIf="noEmployeesMessage">{{ noEmployeesMessage }}</div>  -->
+  </div> -->
+  <div id="empCardCont" class="cards">
+    <ng-container *ngIf="employees.length > 0; else noEmployeesBlock">
+      <app-employee-card *ngFor="let employee of employees" [employee]="employee"></app-employee-card>
+    </ng-container>
   </div>
-
+  
+  <ng-template #noEmployeesBlock>
+    <p>{{ noEmployeesMessageValue }}</p>
+  </ng-template>
+  
   

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent {
   filtereddEmployees: { firstname: string, designation: string, department: string }[] = []; // Filtering employees based on filters
   characters: string[] = [];         // Selected characters on button
@@ -68,15 +69,8 @@ export class NavbarComponent {
       }
   
       return searchProperty.includes(searchValue);
-    });
-  
-    if (this.filtereddEmployees.length === 0) {
-      this.noEmployeesMessage = 'No employees found!';
-    } else {
-      this.noEmployeesMessage = '';
-    }
-  
-    this.filteredEmployeesEvent.emit(this.filtereddEmployees);
+    });   
+   this.filteredEmployeesEvent.emit(this.filtereddEmployees);
   }
   
 

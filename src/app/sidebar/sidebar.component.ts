@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { EmployeeService } from '../employee.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -57,23 +57,57 @@ export class SidebarComponent {
     this.employeeService.locationCounts$.subscribe(counts => {
       this.locationCounts = counts;
     });
-  }
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const urlSegments = event.url.split('/');
+        const departmentSegmentIndex = urlSegments.indexOf('department');
+        const officesSegmentIndex = urlSegments.indexOf('offices');
+        const jobTitlesSegmentIndex = urlSegments.indexOf('jobTitles');
+    
+        if (departmentSegmentIndex !== -1 && urlSegments.length > departmentSegmentIndex + 1) {
+          const department = urlSegments[departmentSegmentIndex + 1];
+          this.filterEmployeesByDepartment(department);
+        } else if (departmentSegmentIndex !== -1) {
+          // If only 'department' segment is present without a value, reset the filter
+          this.filterEmployeesByDepartment('');
+        }
+    
+        if (officesSegmentIndex !== -1 && urlSegments.length > officesSegmentIndex + 1) {
+          const office = urlSegments[officesSegmentIndex + 1];
+          this.filterEmployeesByOffice(office);
+        } else if (officesSegmentIndex !== -1) {
+          // If only 'offices' segment is present without a value, reset the filter
+          this.filterEmployeesByOffice('');
+        }
+    
+        if (jobTitlesSegmentIndex !== -1 && urlSegments.length > jobTitlesSegmentIndex + 1) {
+          const jobTitle = urlSegments[jobTitlesSegmentIndex + 1];
+          this.filterEmployeesByJobTitle(jobTitle);
+        } else if (jobTitlesSegmentIndex !== -1) {
+          // If only 'jobTitles' segment is present without a value, reset the filter
+          this.filterEmployeesByJobTitle('');
+        }
+      }
+    });
+    
+}
 
   filterEmployeesByDepartment(department: string): void {
     const filteredEmployees = this.allEmployees.filter(employee => employee.department === department);
     this.filteredEmployees$.emit(filteredEmployees);
-    this.router.navigateByUrl('/department');
+    this.router.navigateByUrl(`/department/${department}`);
   }
   
   filterEmployeesByOffice(office: string): void {
     const filteredEmployees = this.allEmployees.filter(employee => employee.location === office);
     this.filteredEmployees$.emit(filteredEmployees);
-    this.router.navigateByUrl('/offices')
+    this.router.navigateByUrl(`/offices/${office}`);
   }
   
   filterEmployeesByJobTitle(jobTitle: string): void {
     const filteredEmployees = this.allEmployees.filter(employee => employee.designation === jobTitle);
     this.filteredEmployees$.emit(filteredEmployees);
-    this.router.navigateByUrl('/jobTitles')
-  } 
+    this.router.navigateByUrl(`/jobTitles/${jobTitle}`);
+  }
 }

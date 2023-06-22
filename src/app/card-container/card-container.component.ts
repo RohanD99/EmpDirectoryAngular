@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from '../employee.service';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 
 @Component({
   selector: 'app-card-container',
@@ -11,23 +11,34 @@ import { Observable, Subscription } from 'rxjs';
 })
 
 export class CardContainerComponent {
-@Input() employees: any[] = [];                  //sending to emp-card comp.             
-@Input() noEmployeesMessage: string = '';        //displaying msg  
+@Input() employees: any[] = [];                  //sending to emp-card comp.                     //displaying msg  
 isFormVisible: boolean = false;
 selectedEmployee: any;                           //selected emp in emp-card comp.
 formGroup!: FormGroup;
 @Input() filteredEmployees: any[] = [];
 private employeesSubscription: Subscription;
 private allEmployees: any[] = [];
+department!: string;
+office!: string;
+jobTitle!: string;
+@Input() noEmployeesMessage: Observable<string> = of('');
 
-constructor(private router: Router,private employeeService: EmployeeService) { 
+private noEmployeesMessageSubscription: Subscription;
+noEmployeesMessageValue: string = '';
+
+
+constructor(private router: Router,private employeeService: EmployeeService,private route: ActivatedRoute) { 
   this.employeesSubscription = this.employeeService.employees$.subscribe(employees => {
     this.allEmployees = employees;
   });
+  this.noEmployeesMessageSubscription = this.noEmployeesMessage.subscribe(message => {
+    this.noEmployeesMessageValue = message;
+  });
 }
 
-ngOnDestroy() {
+ngOnDestroy(){
   this.employeesSubscription.unsubscribe();
+  this.noEmployeesMessageSubscription.unsubscribe();
 }
 
 openForm(employee: any): void {
@@ -36,7 +47,9 @@ openForm(employee: any): void {
 
 ngOnInit() {
   this.loadEmployees();               //load emp from localStorage
+  
 }
+
 
 loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();

@@ -9,6 +9,7 @@ import { EmployeeFormComponent } from '../employee-form/employee-form.component'
 import { EmployeeCardComponent } from '../employee-card/employee-card.component';
 import { EmployeeService } from '../employee.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   exports: [EmployeeDirectoryContainerComponent],           //shared module
   providers: [EmployeeService]

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EmployeeService } from '../employee.service';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-employee-directory-container',
@@ -12,7 +13,7 @@ export class EmployeeDirectoryContainerComponent implements OnInit {
   selectedEmployee: any = {};
   editMode: boolean = false;
   employees: any[] = [];
-  @Input() noEmployeesMessage: string = '';
+  @Input() noEmployeesMessage: Observable<string> = of('');
   filteredEmployees: any[] = [];
   selectedAlphabet: string = '';
   searchTerm: string = '';
@@ -74,6 +75,10 @@ export class EmployeeDirectoryContainerComponent implements OnInit {
   handleNavbarFilteredEmployees(filteredEmployees: any[]): void {
     this.filteredEmployees = filteredEmployees;
   }
+
+  handleFilteredofEmployees(filteredEmployees: any[]): void {
+    this.filteredEmployees = filteredEmployees;
+    this.noEmployeesMessage = of(filteredEmployees.length === 0 ? 'No employees found!' : '');
+  }
   
- 
 }
