@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EmployeeService } from '../employee.service';
+import { EmployeeService } from '../employee-services/employee.service';
 import { Router } from '@angular/router';
+import { noEmpMsg } from '../constants/constants';
 
 @Component({
   selector: 'app-navbar',
@@ -9,21 +10,21 @@ import { Router } from '@angular/router';
 })
 
 export class NavbarComponent {
-  filtereddEmployees: { firstname: string, designation: string, department: string }[] = []; // Filtering employees based on filters
+  filtereddEmployees: { firstname: string, designation: string, department: string }[] = [];    //Filtering employees based on filters
   characters: string[] = [];         // Selected characters on button
   isFormVisible: boolean = false;     
   @Input() employees: any[] = [];    // Send to card-cont.
   selectedCharacter: string = '';    // Initially empty character string
   searchValue: string = '';          // Initially empty search value string
-  noEmployeesMessage: string = '';   // Displayed in card-cont
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
+  @Input() noEmployeesMessage: string = '';
 
   constructor(private employeeService: EmployeeService, private router: Router) {
-    this.generateAlphabet();
-    this.filtereddEmployees = this.employees; // Initialize filteredEmployees with all employees
+    this.generateAlphabets();
+    this.filtereddEmployees = this.employees;                // Initialize filteredEmployees with all employees
   }
 
-  generateAlphabet() { // Generate alphabet buttons
+  generateAlphabets() {                          // Generate alphabet buttons
     const startCharCode = 'A'.charCodeAt(0);
     const endCharCode = 'Z'.charCodeAt(0);
 
@@ -38,36 +39,31 @@ export class NavbarComponent {
     this.selectedCharacter = '';
     const employeesFromLocalStorageString = localStorage.getItem('employees');
     this.filtereddEmployees = employeesFromLocalStorageString ? JSON.parse(employeesFromLocalStorageString) : [];
-
-    if (this.filtereddEmployees.length === 0) {
-      this.noEmployeesMessage = 'No employees found!';
-    } else {
-      this.noEmployeesMessage = '';
-    }
     this.paginationFilter();
+    noEmpMsg();
   }
 
   onSearch(event: Event): void {
-    const target = event.target as HTMLInputElement;
+    const target = event.target as HTMLInputElement;         //setting target to access properties and methods of selected element
     const searchValue = target.value.trim().toLowerCase();
-    const filterBy = (document.getElementById('filterBy') as HTMLSelectElement).value;
+    const filterBy = (document.getElementById('filterBy') as HTMLSelectElement).value;  //retrieves the value of an HTML selected element 
   
     const employeesFromLocalStorageString = localStorage.getItem('employees');
     const employeesFromLocalStorage = employeesFromLocalStorageString ? JSON.parse(employeesFromLocalStorageString) : [];
   
     this.filtereddEmployees = employeesFromLocalStorage.filter((employee: { firstname: string, designation: string, department: string }) => {
       let searchProperty: string;
-      if (filterBy === 'firstName') {
+      if (filterBy === 'preferredName') {
         searchProperty = employee.firstname.toLowerCase();
       } else if (filterBy === 'designation') {
         searchProperty = employee.designation.toLowerCase();
       } else if (filterBy === 'department') {
         searchProperty = employee.department.toLowerCase();
       } else {
-        // Default to firstname
+        // Default to preferredName
         searchProperty = employee.firstname.toLowerCase();
       }
-  
+      
       return searchProperty.includes(searchValue);
     });   
    this.filteredEmployeesEvent.emit(this.filtereddEmployees);
@@ -87,7 +83,7 @@ export class NavbarComponent {
     this.paginationFilter();
   }
 
-
+//Alphabets filter
   paginationFilter(): void {
     const employeesFromLocalStorageString = localStorage.getItem('employees');
     const employeesFromLocalStorage = employeesFromLocalStorageString ? JSON.parse(employeesFromLocalStorageString) : [];
@@ -97,6 +93,7 @@ export class NavbarComponent {
       return startsWithCharacter;
     });
     this.filteredEmployeesEvent.emit(filteredEmployees);
+    noEmpMsg();
   }
   
   addEmployee(employee: any): void {
@@ -116,4 +113,5 @@ export class NavbarComponent {
   hideEmployeeForm() {
     this.isFormVisible = false;
   }
+  
 }

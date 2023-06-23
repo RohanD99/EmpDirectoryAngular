@@ -72,25 +72,23 @@
         </div>
 
         <div class="inp-warning-div">
-            <div class="inp-container">
-              <label for="mobileNo" class="input-label">Mobile<span id="req" #mobile>*</span></label>
-              <input type="number" id="mobileNo" class="input-box" placeholder="Enter Mobile Number" maxlength="13" formControlName="mobile" [(ngModel)]="selectedEmployee.mobile">
-              <div class="input-icon">
-                <div class="success-icon" *ngIf="formGroup.get('mobile')?.valid && formGroup.get('mobile')?.dirty">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="error-icon" *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty">
-                  <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
-                </div>
+          <div class="inp-container">
+            <label for="mobileNo" class="input-label">Mobile<span id="req" #mobile>*</span></label>
+            <input type="text" id="mobileNo" class="input-box" placeholder="Enter Mobile Number" formControlName="mobile" [(ngModel)]="selectedEmployee.mobile" minlength="10" maxlength="13">
+            <div class="input-icon">
+              <div class="success-icon" *ngIf="formGroup.get('mobile')?.valid && formGroup.get('mobile')?.dirty">
+                <i class="fa-solid fa-circle-check"></i>
               </div>
-              <div *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty" class="error-message">
-                <div *ngIf="formGroup.get('mobile')?.errors?.['required']">Mobile number is required.</div>
-                <div *ngIf="formGroup.get('mobile')?.errors?.['pattern']">Mobile number must be a valid phone number.</div>
+              <div class="error-icon" *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
               </div>
             </div>
+            <div *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty" class="error-message">
+              <div *ngIf="formGroup.get('mobile')?.errors?.['required']">Mobile number is required.</div>
+            </div>
           </div>
-
-
+        </div>
+        
           <div class="inp-warning-div">
             <div class="inp-container">
               <label for="mailId" class="input-label">Mail <span id="req" #mail>*</span></label>

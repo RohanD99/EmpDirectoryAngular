@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EmployeeFormComponent } from './employee-form/employee-form.component';
-import { EmployeeCardComponent } from './employee-card/employee-card.component';
+import { EmployeeCardComponent } from './card-assets/employee-card/employee-card.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -11,11 +11,13 @@ const routes: Routes = [
   { path: 'department/:department', component: EmployeeCardComponent },
   { path: 'offices/:office', component: EmployeeCardComponent },
   { path: 'jobTitles/:jobTitle', component: EmployeeCardComponent },
-  {path: 'home', component: EmployeeCardComponent}
-];
+  {path: 'home', component: EmployeeCardComponent},
+  {path: '**', redirectTo: 'home' }          //wildcard route
+]; 
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule { }

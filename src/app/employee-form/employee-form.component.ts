@@ -1,13 +1,16 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from '../employee.service';
-import { Route, Router } from '@angular/router';
+import { EmployeeService } from '../employee-services/employee.service';
+import { Router } from '@angular/router';
+import { Employee } from '../models/employee.model';
+import { NAME_PATTERN,EMAIL_PATTERN } from '../constants/constants';
 
 @Component({
   selector: 'app-employee-form',
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.css']
 })
+
 export class EmployeeFormComponent {
   @Input() isFormVisible: boolean = false;
   @Input() employee: any;
@@ -17,7 +20,6 @@ export class EmployeeFormComponent {
   @Input() editMode: boolean = false;
   @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
   addClicked: boolean = false;
-
   formGroup!: FormGroup;
 
   constructor(
@@ -33,12 +35,12 @@ export class EmployeeFormComponent {
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      firstname: ['', [Validators.required, Validators.pattern('[A-Za-z]+')]],
-      lastname: ['', [Validators.required, Validators.pattern('[A-Za-z]+')]],
+      firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
+      lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
       designation: ['', Validators.required],
       department: ['', Validators.required],
       mobile: ['', Validators.required],
-      mailId: ['', [Validators.required, Validators.email]],
+      mailId: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
       location: ['', Validators.required],
       skypeId: ['', Validators.required],
     });
@@ -48,38 +50,43 @@ export class EmployeeFormComponent {
     }
   }
 
+   getFormControlValue(controlName: string): any {
+    const control = this.formGroup.get(controlName);
+    return control ? control.value : null;
+  }
+
   addEmployee(): void {
-    // this.router.navigateByUrl(['/add'])
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       this.addClicked = true;
       return;
     }
 
-    const firstname = this.formGroup.get('firstname')?.value;
-    const lastname = this.formGroup.get('lastname')?.value;
-    const designation = this.formGroup.get('designation')?.value;
-    const department = this.formGroup.get('department')?.value;
-    const mobile = this.formGroup.get('mobile')?.value;
-    const mailId = this.formGroup.get('mailId')?.value;
-    const location = this.formGroup.get('location')?.value;
-    const skypeId = this.formGroup.get('skypeId')?.value;
+    const firstname = this.getFormControlValue('firstname');
+    const lastname = this.getFormControlValue('lastname');
+    const designation = this.getFormControlValue('designation');
+    const department = this.getFormControlValue('department');
+    const mobile = this.getFormControlValue('mobile');
+    const mailId = this.getFormControlValue('mailId');
+    const location = this.getFormControlValue('location');
+    const skypeId = this.getFormControlValue('skypeId');
+    
 
-    const employee = {
-      firstname: firstname,
-      lastname: lastname,
-      designation: designation,
-      department: department,
-      mobile: mobile,
-      mailId: mailId,
-      location: location,
-      skypeId: skypeId,
-      preferredName: firstname + ' ' + lastname,
-    };
+    const employee = new Employee(
+      firstname,
+      lastname,
+      designation,
+      department,
+      mobile,
+      mailId,
+      location,
+      skypeId,  
+    );
 
     this.addEmp.emit(employee);
-    this.employeeService.addEmployee(employee);
+    this.employeeService.addEmployee(employee);  
     this.formGroup.reset();
+    // window.location.reload()
   }
 
   updateEmployee(): void {
@@ -92,7 +99,6 @@ export class EmployeeFormComponent {
     const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };
     this.employeeService.updateEmployee(updatedEmployee);
     this.updateEmp.emit(updatedEmployee);
-    this.hideForm();
-    
+    this.hideForm();    
   }
 }

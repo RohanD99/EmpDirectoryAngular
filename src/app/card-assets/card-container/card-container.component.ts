@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Output, Input  } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeService } from '../employee.service';
+import { EmployeeService } from 'src/app/employee-services/employee.service';
 import { FormGroup } from '@angular/forms';
-import { Observable, Subscription, of } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-card-container',
@@ -16,29 +16,21 @@ isFormVisible: boolean = false;
 selectedEmployee: any;                           //selected emp in emp-card comp.
 formGroup!: FormGroup;
 @Input() filteredEmployees: any[] = [];
+@Input() noEmployeesMessage: string = '';
 private employeesSubscription: Subscription;
 private allEmployees: any[] = [];
 department!: string;
 office!: string;
 jobTitle!: string;
-@Input() noEmployeesMessage: Observable<string> = of('');
-
-private noEmployeesMessageSubscription: Subscription;
-noEmployeesMessageValue: string = '';
-
 
 constructor(private router: Router,private employeeService: EmployeeService,private route: ActivatedRoute) { 
   this.employeesSubscription = this.employeeService.employees$.subscribe(employees => {
     this.allEmployees = employees;
   });
-  this.noEmployeesMessageSubscription = this.noEmployeesMessage.subscribe(message => {
-    this.noEmployeesMessageValue = message;
-  });
 }
 
 ngOnDestroy(){
   this.employeesSubscription.unsubscribe();
-  this.noEmployeesMessageSubscription.unsubscribe();
 }
 
 openForm(employee: any): void {
@@ -47,16 +39,12 @@ openForm(employee: any): void {
 
 ngOnInit() {
   this.loadEmployees();               //load emp from localStorage
-  
+  this.filteredEmployees = this.allEmployees;
 }
-
 
 loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();
 }
 
-deleteEmployee(employeeId: number) {
-  this.employees = this.employees.filter((employee: any) => employee.id !== employeeId);
-}
 
 }

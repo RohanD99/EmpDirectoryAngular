@@ -3,14 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EmployeeManagementComponent } from './employee-management/employee-management.component';
-import { EmployeesModule } from './employees/employees.module';
+
+import { EmployeesModule } from './modules/employees.module';
 import { RouterModule } from '@angular/router';
+import { HeaderModule } from './modules/header.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    EmployeeManagementComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -18,7 +20,9 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     FormsModule,
     EmployeesModule,
-    RouterModule
+    RouterModule,
+    HeaderModule,
+    
   ],
   bootstrap: [AppComponent]
 })

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { EmployeeService } from '../employee.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { EmployeeService } from 'src/app/employee-services/employee.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,8 +14,7 @@ export class EmployeeCardComponent {
   @Input() isSelected = false;
   editMode: boolean = false;
   isFormVisible: boolean = false;
-  isConfirmationVisible: boolean = false;
-  confirmationEmployee: any;
+  isDeleteConfirmation: boolean = false;
   selectedEmployee: any;
   @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();   //sending to form comp.
   @Output() employeeDeleted: EventEmitter<void> = new EventEmitter<void>();   
@@ -24,7 +23,7 @@ export class EmployeeCardComponent {
 
   showEditForm(){
     this.editMode = false;
-    this.selectedEmployee = false
+    this.selectedEmployee = null
   }
 
   showEmployeeForm(editedEmployee: any): void {                 //show edit form
@@ -39,24 +38,22 @@ export class EmployeeCardComponent {
   }
 
   deleteEmployee(employee: any): void {
-    console.log('Deleting employee:', employee);
-    this.isConfirmationVisible = true;
-    this.confirmationEmployee = employee;
+    this.isDeleteConfirmation = true;
+    this.selectedEmployee = employee; 
     this.router.navigateByUrl('/delete/:id');
   }
 
   confirmDelete(): void {
-    this.employeeService.deleteEmployee(this.confirmationEmployee.id);
-    this.isConfirmationVisible = false;
-    this.employeeDeleted.emit(this.confirmationEmployee.id);
+    this.employeeService.deleteEmployee(this.selectedEmployee.id);
+    this.isDeleteConfirmation = false;
+    this.employeeDeleted.emit(this.selectedEmployee.id);
   }
 
   cancelDelete(): void {
-    this.isConfirmationVisible = false;
+    this.isDeleteConfirmation = false;
   }
 
   updateEmployee(updatedEmployee: any): void {    
-    console.log('Updated Employee:', updatedEmployee);
     this.employeeService.updateEmployee(updatedEmployee);
     this.updateEmp.emit(updatedEmployee);
     this.hideForm();

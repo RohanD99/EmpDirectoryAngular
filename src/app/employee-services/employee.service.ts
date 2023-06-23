@@ -26,58 +26,21 @@ export class EmployeeService {
     this.updateCounts();
   }
 
-  generateUniqueId(): number {
-    const employees = this.getEmployeesFromLocalStorage();
-    let maxId = 0;
-
-    if (employees) {
-      for (const employee of employees) {
-        if (employee.id > maxId) {
-          maxId = employee.id;
-        }
-      }
-    }
-    return maxId + 1;
+  generateUniqueId(employee: any): number {
+    const currentTimestamp = new Date().getTime();
+    const maxId = employee && employee.id ? employee.id : 0;
+    const uniqueId = Math.max(maxId + 1, currentTimestamp);
+    return uniqueId;
   }
 
-  // generateUniqueId(): string {
-  //   const timestamp: number = new Date().getTime();
-  //   const uuid: string = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char: string) => {
-  //     const randomValue: number = (timestamp + Math.random() * 16) % 16 | 0;
-  //     timestamp Math.floor(timestamp / 16);
-  //     return (char === 'x' ? randomValue : (randomValue & 0x3) | 0x8).toString(16);
-  //   });
-  //   return uuid;
-  // }
-  
-
-//  generateUniqueId(): string {
-//     const now = new Date();
-//     const uniqueId = now.getTime().toString();
-    
-//     const employeesFromLocalStorageString = localStorage.getItem('employees');
-//     const employeesFromLocalStorage = employeesFromLocalStorageString ? JSON.parse(employeesFromLocalStorageString) : [];
-    
-//     const idExists = employeesFromLocalStorage.some((employee: { id: string }) => employee.id === uniqueId);
-//     if (idExists) {
-//       // If the generated ID already exists, recursively call the function again to generate a new ID
-//       return this.generateUniqueId();
-//     }
-    
-//     return uniqueId;
-//   }
-  
-
-  // generateUniqueId(): number {
-  //   let count = 0;
-  
-  
-  //   if (employees && employees.length > 0) {
-  //     count = employees.length;
-  //   }
-  
-  //   return count + 1;
-  // }
+  loadEmployeesFromLocalStorage() {
+    const employeesFromLocalStorage = localStorage.getItem('employees');
+    let result:any;
+    if (employeesFromLocalStorage) {
+      result = JSON.parse(employeesFromLocalStorage);
+    }
+    return result;
+  }
 
   getEmployeesFromLocalStorage(): any[] {
     const employeesJson = localStorage.getItem(this.localStorageKey);
@@ -94,12 +57,14 @@ export class EmployeeService {
   }
 
   addEmployee(employee: any): void {
-    // employee.id = this.generateUniqueId();
-    this.allEmployees.push(employee);
+    const newEmployee = { ...employee, id: this.generateUniqueId(employee) };
+    newEmployee.preferredName = `${newEmployee.firstname} ${newEmployee.lastname}`; 
+    this.allEmployees.push(newEmployee);
     this.saveEmployeesToLocalStorage(this.allEmployees);
     this.updateCounts();
     this.emitEmployees();
   }
+  
 
   updateEmployee(updatedEmployee: any): void {
     const index = this.allEmployees.findIndex((employee: any) => employee.id === updatedEmployee.id);
@@ -107,7 +72,7 @@ export class EmployeeService {
       this.allEmployees[index] = updatedEmployee;
       this.saveEmployeesToLocalStorage(this.allEmployees);
       this.updateCounts();
-      this.emitEmployees();
+      this.emitEmployees();      
     }
   }
 
