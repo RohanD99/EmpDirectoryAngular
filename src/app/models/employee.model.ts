@@ -18,6 +18,7 @@ export class Employee {
       location: string,
       skypeId: string,
     ) 
+    
     {
       this.firstname = firstname;
       this.lastname = lastname;

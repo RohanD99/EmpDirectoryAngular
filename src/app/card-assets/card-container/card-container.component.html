@@ -1,7 +1,7 @@
 <div id="empCardCont" class="cards">
   <app-employee-card *ngFor="let employee of employees" [employee]="employee"></app-employee-card>
+  <div *ngIf="employees.length === 0">{{emptyMsg}}</div>                                   
 </div>
-
 
 
 

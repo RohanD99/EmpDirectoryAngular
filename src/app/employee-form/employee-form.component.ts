@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Employee } from '../models/employee.model';
 import { NAME_PATTERN,EMAIL_PATTERN } from '../constants/constants';
 
+
 @Component({
   selector: 'app-employee-form',
   templateUrl: './employee-form.component.html',
@@ -12,14 +13,14 @@ import { NAME_PATTERN,EMAIL_PATTERN } from '../constants/constants';
 })
 
 export class EmployeeFormComponent {
-  @Input() isFormVisible: boolean = false;
-  @Input() employee: any;
-  @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();
-  @Output() hideFormEvent = new EventEmitter<void>();
-  @Input() selectedEmployee: any = {};
-  @Input() editMode: boolean = false;
-  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();
-  addClicked: boolean = false;
+  @Input() isFormVisible: boolean = false;                                    //form visibility
+  @Input() employee: any;                                                     //sending emp data to card-cont comp
+  @Output() addEmp: EventEmitter<any> = new EventEmitter<any>();              //emitting emp data in card comp
+  @Output() hideFormEvent = new EventEmitter<void>();                        
+  @Input() selectedEmployee: any = {};                                         //used to get selected emp details
+  @Input() editMode: boolean = false;                                         
+  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();            //emitting updata in emp-card comp
+  addClicked: boolean = false;                                                 //if user directly clicks on add btn in form
   formGroup!: FormGroup;
 
   constructor(
@@ -50,7 +51,7 @@ export class EmployeeFormComponent {
     }
   }
 
-   getFormControlValue(controlName: string): any {
+   getFormControlValue(controlName: string): any {                            //for getting values of form 
     const control = this.formGroup.get(controlName);
     return control ? control.value : null;
   }
@@ -71,9 +72,8 @@ export class EmployeeFormComponent {
     const location = this.getFormControlValue('location');
     const skypeId = this.getFormControlValue('skypeId');
     
-
-    const employee = new Employee(
-      firstname,
+    const employee = new Employee(                                      //fetching from model class 
+      firstname,       
       lastname,
       designation,
       department,
@@ -86,7 +86,6 @@ export class EmployeeFormComponent {
     this.addEmp.emit(employee);
     this.employeeService.addEmployee(employee);  
     this.formGroup.reset();
-    // window.location.reload()
   }
 
   updateEmployee(): void {
@@ -95,10 +94,10 @@ export class EmployeeFormComponent {
       return;
     }
 
-    const selectedEmployeeId = this.selectedEmployee.id;
-    const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };
+    const selectedEmployeeId = this.selectedEmployee.id;                               //current selected emp
+    const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };       //selected emp's data in edit form
     this.employeeService.updateEmployee(updatedEmployee);
-    this.updateEmp.emit(updatedEmployee);
+    this.updateEmp.emit(updatedEmployee);                                              //update in emp-card comp
     this.hideForm();    
   }
 }

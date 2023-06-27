@@ -39,8 +39,7 @@ export class SidebarComponent {
 
   constructor(private employeeService: EmployeeService,private router: Router) { }
 
-  ngOnInit(): void {
-   
+  ngOnInit(): void {  
     this.allEmployees= this.employeeService.loadEmployeesFromLocalStorage(); 
     this.employeeService.updateCounts();
 
