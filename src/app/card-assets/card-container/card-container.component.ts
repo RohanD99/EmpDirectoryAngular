@@ -50,5 +50,4 @@ loadEmployees() {
   this.employees = this.employeeService.getEmployeesFromLocalStorage();
 }
 
-
 }
