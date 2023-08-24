@@ -22,7 +22,7 @@ export class SidebarComponent {
   filteredEmployees: Employee[] = [];
   @Output() filteredEmployees$: EventEmitter<Employee[]> = new EventEmitter<Employee[]>();
 
-  constructor(private employeeService: EmployeeService, private router: Router) {}
+  constructor(private employeeService: EmployeeService, private router: Router) { }
 
   ngOnInit(): void {
     this.allEmployees = this.employeeService.loadEmployeesFromLocalStorage();
@@ -42,7 +42,7 @@ export class SidebarComponent {
     this.departments = [...new Set(this.allEmployees.map(employee => employee.department))];
     this.offices = [...new Set(this.allEmployees.map(employee => employee.location))];
     this.jobTitles = [...new Set(this.allEmployees.map(employee => employee.designation))];
-    
+
     this.sections = [
       {
         heading: 'Departments',

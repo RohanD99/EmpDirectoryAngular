@@ -8,7 +8,7 @@ export class Employee {
   mailId: string;
   location: string;
   skypeId: string;
-  preferredName: string; // Add the preferredName property
+  preferredName: string; 
 
   constructor(
     id: number,
@@ -30,6 +30,6 @@ export class Employee {
     this.mailId = mailId;
     this.location = location;
     this.skypeId = skypeId;
-    this.preferredName = `${firstname} ${lastname}`; // Set preferredName
+    this.preferredName = `${firstname} ${lastname}`; 
   }
 }

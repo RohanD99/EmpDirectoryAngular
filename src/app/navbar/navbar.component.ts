@@ -13,16 +13,16 @@ import { Utility } from '../common/utility.service';
 export class NavbarComponent {
   filtereddEmployees: { firstname: string, designation: string, department: string }[] = [];    //Filtering employees based on filters
   characters: string[] = [];         // Selected characters on button
-  isFormVisible: boolean = false;     
+  isFormVisible: boolean = false;
   @Input() employees: Employee[] = [];    // Send to card-cont.
   selectedCharacter: string = '';    // Initially empty character string
   searchValue: string = '';          // Initially empty search value string
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
   noEmployeesMessage: string = '';
-  
 
 
-  constructor(private employeeService: EmployeeService, private router: Router,private utility: Utility) {
+
+  constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility) {
     this.characters = this.utility.generateAlphabets();
     this.filtereddEmployees = this.employees;                // Initialize filteredEmployees with all employees
   }
@@ -59,7 +59,7 @@ export class NavbarComponent {
 
     this.filteredEmployeesEvent.emit(this.filtereddEmployees);
   }
-  
+
 
   onClearAll(): void {
     this.searchValue = '';
@@ -74,19 +74,19 @@ export class NavbarComponent {
     this.paginationFilter();
   }
 
-//Alphabets filter
-paginationFilter(): void {
-  const employees = this.employeeService.loadEmployeesFromLocalStorage();
-  const filteredEmployees = employees.filter((employee: { firstname: string }) => {
-    const startsWithCharacter = !this.selectedCharacter ||
-      employee.firstname.charAt(0).toLowerCase() === this.selectedCharacter.toLowerCase();
-    return startsWithCharacter;
-  });
+  //Alphabets filter
+  paginationFilter(): void {
+    const employees = this.employeeService.loadEmployeesFromLocalStorage();
+    const filteredEmployees = employees.filter((employee: { firstname: string }) => {
+      const startsWithCharacter = !this.selectedCharacter ||
+        employee.firstname.charAt(0).toLowerCase() === this.selectedCharacter.toLowerCase();
+      return startsWithCharacter;
+    });
 
-  this.filtereddEmployees = filteredEmployees;
-  this.filteredEmployeesEvent.emit(this.filtereddEmployees);
-}
-  
+    this.filtereddEmployees = filteredEmployees;
+    this.filteredEmployeesEvent.emit(this.filtereddEmployees);
+  }
+
   addEmployee(employee: Employee): void {
     this.employees.push(employee);
     this.hideEmployeeForm();
@@ -117,13 +117,13 @@ paginationFilter(): void {
       } else {
         searchProperty = employee.firstname.toLowerCase();
       }
-  
+
       const matchesPreferredName = filterBy !== 'preferredName' && employee.firstname.toLowerCase().includes(searchValue);
       const matchesDepartment = filterBy !== 'department' && employee.department.toLowerCase().includes(searchValue);
       const matchesDesignation = filterBy !== 'designation' && employee.designation.toLowerCase().includes(searchValue);
-  
+
       return searchProperty.includes(searchValue) && !matchesPreferredName && !matchesDepartment && !matchesDesignation;
     });
   }
-  
+
 }

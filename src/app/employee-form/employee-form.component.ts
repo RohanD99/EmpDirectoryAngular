@@ -17,7 +17,7 @@ export class EmployeeFormComponent {
   @Input() employee: Employee | undefined;
   @Output() addEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   @Output() hideFormEvent = new EventEmitter<void>();
-  @Input() selectedEmployee: any;
+  @Input() selectedEmployee: Employee | undefined;
   @Input() editMode: boolean = false;
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   addClicked: boolean = false;
@@ -52,7 +52,7 @@ export class EmployeeFormComponent {
     }
   }
 
-  getFormControlValue(controlName: string): any {                           
+  getFormControlValue(controlName: string): any {
     const control = this.formGroup.get(controlName);
     return control ? control.value : null;
   }
@@ -64,17 +64,17 @@ export class EmployeeFormComponent {
       return;
     }
 
-    const firstname = this.utility.getFormControlValue(this.formGroup,'firstname');
-    const lastname = this.utility.getFormControlValue(this.formGroup,'lastname');
-    const designation = this.utility.getFormControlValue(this.formGroup,'designation');
-    const department = this.utility.getFormControlValue(this.formGroup,'department');;
-    const mobile = this.utility.getFormControlValue(this.formGroup,'mobile');
-    const mailId = this.utility.getFormControlValue(this.formGroup,'mailId');
-    const location = this.utility.getFormControlValue(this.formGroup,'location');
-    const skypeId = this.utility.getFormControlValue(this.formGroup,'skypeId');
+    const firstname = this.utility.getFormControlValue(this.formGroup, 'firstname');
+    const lastname = this.utility.getFormControlValue(this.formGroup, 'lastname');
+    const designation = this.utility.getFormControlValue(this.formGroup, 'designation');
+    const department = this.utility.getFormControlValue(this.formGroup, 'department');;
+    const mobile = this.utility.getFormControlValue(this.formGroup, 'mobile');
+    const mailId = this.utility.getFormControlValue(this.formGroup, 'mailId');
+    const location = this.utility.getFormControlValue(this.formGroup, 'location');
+    const skypeId = this.utility.getFormControlValue(this.formGroup, 'skypeId');
 
     const employee = new Employee(
-      0,                                      
+      0,
       firstname,
       lastname,
       designation,
@@ -96,10 +96,15 @@ export class EmployeeFormComponent {
       return;
     }
 
-    const selectedEmployeeId = this.selectedEmployee.id;                               //current selected emp
-    const updatedEmployee = { id: selectedEmployeeId, ...this.formGroup.value };       //selected emp's data in edit form
-    this.employeeService.updateEmployee(updatedEmployee);
-    this.updateEmp.emit(updatedEmployee);                                              //update in emp-card comp
-    this.hideForm();
+    if (this.selectedEmployee) {
+      const updatedEmployee: Employee = {
+        id: this.selectedEmployee.id,
+        ...this.formGroup.value
+      };
+      
+      this.employeeService.updateEmployee(updatedEmployee);
+      this.updateEmp.emit(updatedEmployee);
+      this.hideForm();
+    }
   }
 }

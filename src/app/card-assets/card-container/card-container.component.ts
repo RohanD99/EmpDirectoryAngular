@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnInit, OnDestroy  } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from 'src/app/employee-services/employee.service';
 import { FormGroup } from '@angular/forms';

@@ -41,7 +41,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getEmployees();
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() { }
 
   getEmployees() {
     this.employeeService.initiate();

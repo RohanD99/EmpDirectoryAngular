@@ -36,7 +36,7 @@ export class EmployeeService {
 
   loadEmployeesFromLocalStorage() {
     const employeesFromLocalStorage = localStorage.getItem('employees');
-    let result:any;
+    let result: any;
     if (employeesFromLocalStorage) {
       result = JSON.parse(employeesFromLocalStorage);
     }
@@ -59,13 +59,13 @@ export class EmployeeService {
 
   addEmployee(employee: Employee): void {
     const newEmployee = { ...employee, id: this.generateUniqueId(employee) };
-    newEmployee.preferredName = `${newEmployee.firstname} ${newEmployee.lastname}`; 
+    newEmployee.preferredName = `${newEmployee.firstname} ${newEmployee.lastname}`;
     this.allEmployees.push(newEmployee);
     this.saveEmployeesToLocalStorage(this.allEmployees);
     this.updateCounts();
     this.emitEmployees();
   }
-  
+
   updateEmployee(updatedEmployee: Employee): void {
     const index = this.allEmployees.findIndex((employee: any) => employee.id === updatedEmployee.id);
     if (index !== -1) {
@@ -85,18 +85,18 @@ export class EmployeeService {
       this.emitEmployees();
     }
   }
-  
+
   updateCounts(): void {
     const employees = this.initiate();
     const departmentCounts: Record<string, number> = {};
     const designationCounts: Record<string, number> = {};
     const locationCounts: Record<string, number> = {};
-  
+
     employees.forEach((employee: any) => {
       const department = employee.department;
       const designation = employee.designation;
       const location = employee.location;
-  
+
       departmentCounts[department] = (departmentCounts[department] || 0) + 1;
       designationCounts[designation] = (designationCounts[designation] || 0) + 1;
       locationCounts[location] = (locationCounts[location] || 0) + 1;

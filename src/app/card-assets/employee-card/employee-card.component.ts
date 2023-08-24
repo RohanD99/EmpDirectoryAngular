@@ -19,7 +19,7 @@ export class EmployeeCardComponent {
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   @Output() employeeDeleted: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private employeeService: EmployeeService, private router: Router) {}
+  constructor(private employeeService: EmployeeService, private router: Router) { }
 
   showEditForm() {
     this.editMode = false;
@@ -40,7 +40,7 @@ export class EmployeeCardComponent {
     this.isDeleteConfirmation = true;
     this.selectedEmployee = employee;
   }
-  
+
   confirmDelete() {
     if (this.selectedEmployee) {
       this.employeeService.deleteEmployee(this.selectedEmployee);
@@ -59,6 +59,4 @@ export class EmployeeCardComponent {
   cancelDelete() {
     this.isDeleteConfirmation = false;
   }
-
-
 }
