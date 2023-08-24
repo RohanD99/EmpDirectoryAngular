@@ -1,150 +1,147 @@
 <div class="add-employee-popup" id="popupForm">
-    <div class="form-popup">
-        <form class="form-container" id="myPopupForm" [formGroup]="formGroup">
-        <div class="heading-cancel-cont">
-          <h5 *ngIf="!editMode" class="add-emp-head">Add Employee</h5>
-          <h5  *ngIf="editMode" class="edit-emp-head">Edit Employee</h5>
-          <button type="button" class="btn" (click)="hideForm()">&times;</button>
-        </div>
-                      
-        <div class="inp-warning-div">
-            <div class="inp-container">
-              <label for="firstName" class="input-label">First name <span id="req" #firstName>*</span></label>
-              <input type="text" id="firstName" class="input-box" placeholder="Enter First Name" formControlName="firstname" [(ngModel)]="selectedEmployee.firstname">
-              <div class="input-icon">
-                <div class="success-icon" *ngIf="formGroup.get('firstname')?.valid && formGroup.get('firstname')?.dirty">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="error-icon" *ngIf="formGroup.get('firstname')?.invalid && formGroup.get('firstname')?.dirty">
-                  <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
-                </div>
+  <div class="form-popup">
+      <form class="form-container" id="myPopupForm" [formGroup]="formGroup">
+      <div class="heading-cancel-cont">
+        <h5 *ngIf="!editMode" class="add-emp-head">Add Employee</h5>
+        <h5  *ngIf="editMode" class="edit-emp-head">Edit Employee</h5>
+        <button type="button" class="btn" (click)="hideForm()">&times;</button>
+      </div>
+                    
+      <div class="inp-warning-div">
+          <div class="inp-container">
+            <label for="firstName" class="input-label">First name <span id="req" #firstName>*</span></label>
+            <input type="text" id="firstName" class="input-box" placeholder="Enter First Name" formControlName="firstname" [(ngModel)]="selectedEmployee.firstname">
+            <div class="input-icon">
+              <div class="success-icon" *ngIf="formGroup.get('firstname')?.valid && formGroup.get('firstname')?.dirty">
+                <i class="fa-solid fa-circle-check"></i>
               </div>
-              <div *ngIf="formGroup.get('firstname')?.invalid && formGroup.get('firstname')?.dirty" class="error-message">
-                <div *ngIf="formGroup.get('firstname')?.errors?.['required']">First name is required.</div>
-                <div *ngIf="formGroup.get('firstname')?.errors?.['pattern']">First name must contain only letters.</div>
+              <div class="error-icon" *ngIf="formGroup.get('firstname')?.invalid && formGroup.get('firstname')?.dirty">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
               </div>
+            </div>
+            <div *ngIf="formGroup.get('firstname')?.invalid && formGroup.get('firstname')?.dirty" class="error-message">
+              <div *ngIf="formGroup.get('firstname')?.errors?.['required']">First name is required.</div>
+              <div *ngIf="formGroup.get('firstname')?.errors?.['pattern']">First name must contain only letters.</div>
             </div>
           </div>
-
-          <div class="inp-warning-div">
-            <div class="inp-container">
-              <label for="lastName" class="input-label">Last name<span id="req" #lastName>*</span></label>
-              <input type="text" id="lastName" class="input-box" placeholder="Enter Last Name" formControlName="lastname" [(ngModel)]="selectedEmployee.lastname">
-              <div class="input-icon">
-                <div class="success-icon" *ngIf="formGroup.get('lastname')?.valid && formGroup.get('lastname')?.dirty">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="error-icon" *ngIf="formGroup.get('lastname')?.invalid && formGroup.get('lastname')?.dirty">
-                  <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
-                </div>
-              </div>
-              <div *ngIf="formGroup.get('lastname')?.invalid && formGroup.get('lastname')?.dirty" class="error-message">
-                <div *ngIf="formGroup.get('lastname')?.errors?.['required']">Last name is required.</div>
-                <div *ngIf="formGroup.get('lastname')?.errors?.['pattern']">Last name must contain only letters.</div>
-              </div>
-            </div>
-          </div>
-
-        <div class="inp-warning-div">
-            <div class="inp-container">
-              <label for="designation" class="input-label">Designation</label>
-              <select id="designation" class="input-box" formControlName="designation" [(ngModel)]="selectedEmployee.designation">
-                <option value="Bi Developer" selected>Bi Developer</option>
-                <option value="Business Analyst">Business Analyst</option>
-                <option value=".Net Development Lead">.Net Development Lead</option>
-                <option value="Recruiting Expert">Recruiting Expert</option>
-                <option value="SharePoint Practice Head">SharePoint Practice Head</option>
-              </select>
-            </div>
-          </div>
-          
-
-        <div class="inp-warning-div">
-            <div class="inp-container">
-                <label for="department" class="input-label">Department</label>
-                <select id="department" class="input-box" formControlName="department" [(ngModel)]="selectedEmployee.department">
-                    <option value="Human Resources" selected>HUMAN RESOURCES</option>
-                    <option value="IT">IT</option>                          
-                    <option value="MD">MD</option>
-                    <option value="SALES">SALES</option>
-                </select>
-            </div>
         </div>
 
         <div class="inp-warning-div">
           <div class="inp-container">
-            <label for="mobileNo" class="input-label">Mobile<span id="req" #mobile>*</span></label>
-            <input type="text" id="mobileNo" class="input-box" placeholder="Enter Mobile Number" formControlName="mobile" [(ngModel)]="selectedEmployee.mobile" minlength="10" maxlength="13">
+            <label for="lastName" class="input-label">Last name<span id="req" #lastName>*</span></label>
+            <input type="text" id="lastName" class="input-box" placeholder="Enter Last Name" formControlName="lastname" [(ngModel)]="selectedEmployee.lastname">
             <div class="input-icon">
-              <div class="success-icon" *ngIf="formGroup.get('mobile')?.valid && formGroup.get('mobile')?.dirty">
+              <div class="success-icon" *ngIf="formGroup.get('lastname')?.valid && formGroup.get('lastname')?.dirty">
                 <i class="fa-solid fa-circle-check"></i>
               </div>
-              <div class="error-icon" *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty">
+              <div class="error-icon" *ngIf="formGroup.get('lastname')?.invalid && formGroup.get('lastname')?.dirty">
                 <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
               </div>
             </div>
-            <div *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty" class="error-message">
-              <div *ngIf="formGroup.get('mobile')?.errors?.['required']">Mobile number is required.</div>
+            <div *ngIf="formGroup.get('lastname')?.invalid && formGroup.get('lastname')?.dirty" class="error-message">
+              <div *ngIf="formGroup.get('lastname')?.errors?.['required']">Last name is required.</div>
+              <div *ngIf="formGroup.get('lastname')?.errors?.['pattern']">Last name must contain only letters.</div>
             </div>
+          </div>
+        </div>
+
+      <div class="inp-warning-div">
+          <div class="inp-container">
+            <label for="designation" class="input-label">Designation</label>
+            <select id="designation" class="input-box" formControlName="designation" [(ngModel)]="selectedEmployee.designation">
+              <option value="Bi Developer" selected>Bi Developer</option>
+              <option value="Business Analyst">Business Analyst</option>
+              <option value=".Net Development Lead">.Net Development Lead</option>
+              <option value="Recruiting Expert">Recruiting Expert</option>
+              <option value="SharePoint Practice Head">SharePoint Practice Head</option>
+            </select>
           </div>
         </div>
         
-          <div class="inp-warning-div">
-            <div class="inp-container">
-              <label for="mailId" class="input-label">Mail <span id="req" #mail>*</span></label>
-              <input type="email" id="mailId" class="input-box" placeholder="Enter Mail Id" formControlName="mailId" [(ngModel)]="selectedEmployee.mailId">
-              <div class="input-icon">
-                <div class="success-icon" *ngIf="formGroup.get('mailId')?.valid && formGroup.get('mailId')?.dirty">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="error-icon" *ngIf="formGroup.get('mailId')?.invalid && formGroup.get('mailId')?.dirty">
-                  <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
-                </div>
-              </div>
-              <div *ngIf="formGroup.get('mailId')?.invalid && formGroup.get('mailId')?.dirty" class="error-message">
-                <div *ngIf="formGroup.get('mailId')?.errors?.['required']">Mail Id is required.</div>
-                <div *ngIf="formGroup.get('mailId')?.errors?.['email']">Mail Id must be a valid email address.</div>
-              </div>
+
+      <div class="inp-warning-div">
+          <div class="inp-container">
+              <label for="department" class="input-label">Department</label>
+              <select id="department" class="input-box" formControlName="department" [(ngModel)]="selectedEmployee.department">
+                  <option value="Human Resources" selected>HUMAN RESOURCES</option>
+                  <option value="IT">IT</option>                          
+                  <option value="MD">MD</option>
+                  <option value="SALES">SALES</option>
+              </select>
+          </div>
+      </div>
+
+      <div class="inp-warning-div">
+        <div class="inp-container">
+          <label for="mobileNo" class="input-label">Mobile<span id="req" #mobile>*</span></label>
+          <input type="text" id="mobileNo" class="input-box" placeholder="Enter Mobile Number" formControlName="mobile" [(ngModel)]="selectedEmployee.mobile" minlength="10" maxlength="13">
+          <div class="input-icon">
+            <div class="success-icon" *ngIf="formGroup.get('mobile')?.valid && formGroup.get('mobile')?.dirty">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <div class="error-icon" *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty">
+              <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
             </div>
           </div>
-
-        <div class="inp-warning-div">
-            <div class="inp-container">
-                <label for="location" class="input-label" >Location</label>
-                <select id="location" class="input-box" formControlName="location" [(ngModel)]="selectedEmployee.location">
-                    <option value="India">India</option>
-                    <option value="Seattle">Seattle</option>
-                </select>
-            </div>
+          <div *ngIf="formGroup.get('mobile')?.invalid && formGroup.get('mobile')?.dirty" class="error-message">
+            <div *ngIf="formGroup.get('mobile')?.errors?.['required']">Mobile number is required.</div>
+          </div>
         </div>
-
+      </div>
+      
         <div class="inp-warning-div">
-            <div class="inp-container">
-              <label for="skypeId" class="input-label">Skype Id<span id="req" #skype>*</span></label>
-              <input type="text" id="skypeId" class="input-box" placeholder="Enter Skype Id" formControlName="skypeId" [(ngModel)]="selectedEmployee.skypeId">
-              <div class="input-icon">
-                <div class="success-icon" *ngIf="formGroup.get('skypeId')?.valid && formGroup.get('skypeId')?.dirty">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
-                <div class="error-icon" *ngIf="formGroup.get('skypeId')?.invalid && formGroup.get('skypeId')?.dirty">
-                  <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
-                </div>
+          <div class="inp-container">
+            <label for="mailId" class="input-label">Mail <span id="req" #mail>*</span></label>
+            <input type="email" id="mailId" class="input-box" placeholder="Enter Mail Id" formControlName="mailId" [(ngModel)]="selectedEmployee.mailId">
+            <div class="input-icon">
+              <div class="success-icon" *ngIf="formGroup.get('mailId')?.valid && formGroup.get('mailId')?.dirty">
+                <i class="fa-solid fa-circle-check"></i>
               </div>
-              <div *ngIf="formGroup.get('skypeId')?.invalid && formGroup.get('skypeId')?.dirty" class="error-message">
-                <div *ngIf="formGroup.get('skypeId')?.errors?.['required']">Skype Id is required.</div>
+              <div class="error-icon" *ngIf="formGroup.get('mailId')?.invalid && formGroup.get('mailId')?.dirty">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
               </div>
+            </div>
+            <div *ngIf="formGroup.get('mailId')?.invalid && formGroup.get('mailId')?.dirty" class="error-message">
+              <div *ngIf="formGroup.get('mailId')?.errors?.['required']">Mail Id is required.</div>
+              <div *ngIf="formGroup.get('mailId')?.errors?.['email']">Mail Id must be a valid email address.</div>
             </div>
           </div>
-        <div class="btn-container">
-            <button *ngIf="!editMode" type="button" name="add-btn" class="add-btn" id="onAddEmpBtn" (click)="addEmployee()">Add</button>
-            <button *ngIf="editMode" type="button" name="edit-btn" class="edit-btn" id="onEditEmpBtn" (click)="updateEmployee()">Update</button>
-            <div class="error-message-btn" *ngIf="formGroup.invalid && formGroup.get('firstname')?.touched && formGroup.get('lastname')?.touched && addClicked">
-                Please enter all required fields.
-              </div>
         </div>
-      </form>
-    </div>
+
+      <div class="inp-warning-div">
+          <div class="inp-container">
+              <label for="location" class="input-label" >Location</label>
+              <select id="location" class="input-box" formControlName="location" [(ngModel)]="selectedEmployee.location">
+                  <option value="India">India</option>
+                  <option value="Seattle">Seattle</option>
+              </select>
+          </div>
+      </div>
+
+      <div class="inp-warning-div">
+          <div class="inp-container">
+            <label for="skypeId" class="input-label">Skype Id<span id="req" #skype>*</span></label>
+            <input type="text" id="skypeId" class="input-box" placeholder="Enter Skype Id" formControlName="skypeId" [(ngModel)]="selectedEmployee.skypeId">
+            <div class="input-icon">
+              <div class="success-icon" *ngIf="formGroup.get('skypeId')?.valid && formGroup.get('skypeId')?.dirty">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+              <div class="error-icon" *ngIf="formGroup.get('skypeId')?.invalid && formGroup.get('skypeId')?.dirty">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+              </div>
+            </div>
+            <div *ngIf="formGroup.get('skypeId')?.invalid && formGroup.get('skypeId')?.dirty" class="error-message">
+              <div *ngIf="formGroup.get('skypeId')?.errors?.['required']">Skype Id is required.</div>
+            </div>
+          </div>
+        </div>
+      <div class="btn-container">
+        <button  type="button" name="add-btn" class="add-btn" id="onAddEmpBtn" (click)="addEmployee()">Add</button>
+        <button *ngIf="editMode" type="button" name="edit-btn" class="edit-btn" id="onEditEmpBtn" (click)="updateEmployee()">Update</button>        
+          <div class="error-message-btn" *ngIf="formGroup.invalid && formGroup.get('firstname')?.touched && formGroup.get('lastname')?.touched && addClicked">
+              Please enter all required fields.
+            </div>
+      </div>
+    </form>
+  </div>
 </div>
-
-
-

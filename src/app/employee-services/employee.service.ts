@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Employee } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class EmployeeService {
   locationCounts$ = this.locationCounts.asObservable();
 
   constructor() {
-    this.allEmployees = this.getEmployeesFromLocalStorage();
+    this.allEmployees = this.initiate();
     this.updateCounts();
   }
 
@@ -42,7 +43,7 @@ export class EmployeeService {
     return result;
   }
 
-  getEmployeesFromLocalStorage(): any[] {
+  initiate(): Employee[] {
     const employeesJson = localStorage.getItem(this.localStorageKey);
     return employeesJson ? JSON.parse(employeesJson) : [];
   }
@@ -56,7 +57,7 @@ export class EmployeeService {
     this.employeesSubject.next(this.allEmployees);
   }
 
-  addEmployee(employee: any): void {
+  addEmployee(employee: Employee): void {
     const newEmployee = { ...employee, id: this.generateUniqueId(employee) };
     newEmployee.preferredName = `${newEmployee.firstname} ${newEmployee.lastname}`; 
     this.allEmployees.push(newEmployee);
@@ -65,19 +66,18 @@ export class EmployeeService {
     this.emitEmployees();
   }
   
-
-  updateEmployee(updatedEmployee: any): void {
+  updateEmployee(updatedEmployee: Employee): void {
     const index = this.allEmployees.findIndex((employee: any) => employee.id === updatedEmployee.id);
     if (index !== -1) {
       this.allEmployees[index] = updatedEmployee;
       this.saveEmployeesToLocalStorage(this.allEmployees);
       this.updateCounts();
-      this.emitEmployees();      
+      this.emitEmployees();
     }
   }
 
-  deleteEmployee(employeeId: number): void {
-    const index = this.allEmployees.findIndex((employee: any) => employee.id === employeeId);
+  deleteEmployee(employee: Employee): void {
+    const index = this.allEmployees.findIndex((emp: any) => emp.id === employee.id);
     if (index !== -1) {
       this.allEmployees.splice(index, 1);
       this.saveEmployeesToLocalStorage(this.allEmployees);
@@ -85,9 +85,9 @@ export class EmployeeService {
       this.emitEmployees();
     }
   }
-
+  
   updateCounts(): void {
-    const employees = this.getEmployeesFromLocalStorage();
+    const employees = this.initiate();
     const departmentCounts: Record<string, number> = {};
     const designationCounts: Record<string, number> = {};
     const locationCounts: Record<string, number> = {};
@@ -101,11 +101,6 @@ export class EmployeeService {
       designationCounts[designation] = (designationCounts[designation] || 0) + 1;
       locationCounts[location] = (locationCounts[location] || 0) + 1;
     });
-
-    console.log('Department counts:', departmentCounts);
-    console.log('Designation counts:', designationCounts);
-    console.log('Location counts:', locationCounts);
-
 
     this.departmentCounts.next(departmentCounts);
     this.designationCounts.next(designationCounts);

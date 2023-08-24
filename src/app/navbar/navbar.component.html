@@ -11,13 +11,13 @@
   </div>
   <div class="search-filter-add-container">
     <div class="left-search-cont">
-      <label for="searchInput" class="label-el">Search</label>
+      <label for="searchInput" class="label">Search</label>
       <div class="search-bar">
         <i class="fa-solid fa-magnifying-glass search-logo"></i>
         <input class="search-area" type="search" id="searchInput" name="input" placeholder="Enter any Keyword" (input)="onSearch($event)"/>
       </div>
       <button class="clear-btn" id="clearAllBtn" (click)="onClearAll()">Clear All</button>
-      <label for="search-input" class="label-el">Filter by</label>
+      <label for="search-input" class="label">Filter by</label>
       <select class="select-menu" id="filterBy">
         <option value="preferredName" selected>PreferredName</option>
         <option value="designation">Designation</option>

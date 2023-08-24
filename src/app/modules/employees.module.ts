@@ -1,7 +1,6 @@
 // employees.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmployeeDirectoryContainerComponent } from '../employee-directory-container/employee-directory-container.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { CardContainerComponent } from '../card-assets/card-container/card-container.component';
@@ -14,7 +13,6 @@ import { HeaderModule } from './header.module';
 
 @NgModule({
   declarations: [
-    EmployeeDirectoryContainerComponent,
     SidebarComponent,
     NavbarComponent,
     CardContainerComponent,
@@ -25,9 +23,13 @@ import { HeaderModule } from './header.module';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    HeaderModule
+    HeaderModule,
   ],
-  exports: [EmployeeDirectoryContainerComponent], // Shared module
+  exports: [ SidebarComponent,
+    NavbarComponent,
+    CardContainerComponent,
+    EmployeeFormComponent,
+    EmployeeCardComponent],
   providers: [EmployeeService]
 })
 export class EmployeesModule { }

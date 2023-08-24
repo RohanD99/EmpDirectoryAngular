@@ -1,61 +1,64 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EmployeeService } from 'src/app/employee-services/employee.service';
 import { Router } from '@angular/router';
+import { Employee } from 'src/app/models/employee.model';
 
 @Component({
   selector: 'app-employee-card',
   templateUrl: './employee-card.component.html',
-  styleUrls: ['./employee-card.component.css']
+  styleUrls: ['./employee-card.component.scss']
 })
-
 export class EmployeeCardComponent {
-  @Input() employee: any = [];                
-  @Input() updatedEmployee: any;
+  @Input() employee: Employee | null = null;
+  @Input() updatedEmployee: Employee | null = null;
   @Input() isSelected = false;
   editMode: boolean = false;
   isFormVisible: boolean = false;
   isDeleteConfirmation: boolean = false;
-  selectedEmployee: any;
-  @Output() updateEmp: EventEmitter<any> = new EventEmitter<any>();   //sending to form comp.
-  @Output() employeeDeleted: EventEmitter<void> = new EventEmitter<void>();   
+  selectedEmployee: Employee | null = null;
+  @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
+  @Output() employeeDeleted: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private employeeService: EmployeeService,private router: Router) {}
+  constructor(private employeeService: EmployeeService, private router: Router) {}
 
-  showEditForm(){
+  showEditForm() {
     this.editMode = false;
-    this.selectedEmployee = null
+    this.selectedEmployee = null;
   }
 
-  showEmployeeForm(editedEmployee: any): void {                 //show edit form
-    this.selectedEmployee = { ...this.employee };
+  showEmployeeForm(editedEmployee: Employee) {
+    this.selectedEmployee = { ...this.employee! };
     this.isFormVisible = true;
     this.editMode = true;
-    this.router.navigateByUrl('/edit/:id');
   }
 
-  hideForm(): void {                                           //hide edit form
+  hideForm() {
     this.isFormVisible = false;
   }
 
-  deleteEmployee(employee: any): void {
+  deleteEmployee(employee: Employee) {
     this.isDeleteConfirmation = true;
-    this.selectedEmployee = employee; 
-    this.router.navigateByUrl('/delete/:id');
+    this.selectedEmployee = employee;
+  }
+  
+  confirmDelete() {
+    if (this.selectedEmployee) {
+      this.employeeService.deleteEmployee(this.selectedEmployee);
+      this.isDeleteConfirmation = false;
+      this.employeeDeleted.emit();
+      this.hideForm(); // This line is important to hide the delete confirmation popup
+    }
   }
 
-  confirmDelete(): void {
-    this.employeeService.deleteEmployee(this.selectedEmployee.id);
-    this.isDeleteConfirmation = false;
-    this.employeeDeleted.emit(this.selectedEmployee.id);
-  }
-
-  cancelDelete(): void {
-    this.isDeleteConfirmation = false;
-  }
-
-  updateEmployee(updatedEmployee: any): void {    
+  updateEmployee(updatedEmployee: Employee) {
     this.employeeService.updateEmployee(updatedEmployee);
     this.updateEmp.emit(updatedEmployee);
     this.hideForm();
   }
+
+  cancelDelete() {
+    this.isDeleteConfirmation = false;
+  }
+
+
 }

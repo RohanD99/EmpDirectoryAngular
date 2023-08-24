@@ -1,37 +1,33 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EmployeeService } from '../employee-services/employee.service';
 import { Router } from '@angular/router';
+import { Employee } from '../models/employee.model';
+import { Utility } from '../common/utility.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.scss']
 })
 
 export class NavbarComponent {
   filtereddEmployees: { firstname: string, designation: string, department: string }[] = [];    //Filtering employees based on filters
   characters: string[] = [];         // Selected characters on button
   isFormVisible: boolean = false;     
-  @Input() employees: any[] = [];    // Send to card-cont.
+  @Input() employees: Employee[] = [];    // Send to card-cont.
   selectedCharacter: string = '';    // Initially empty character string
   searchValue: string = '';          // Initially empty search value string
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
   noEmployeesMessage: string = '';
+  
 
-  constructor(private employeeService: EmployeeService, private router: Router) {
-    this.generateAlphabets();
+
+  constructor(private employeeService: EmployeeService, private router: Router,private utility: Utility) {
+    this.characters = this.utility.generateAlphabets();
     this.filtereddEmployees = this.employees;                // Initialize filteredEmployees with all employees
   }
 
-  generateAlphabets() {                          // Generate alphabet buttons
-    const startCharCode = 'A'.charCodeAt(0);
-    const endCharCode = 'Z'.charCodeAt(0);
 
-    for (let charCode = startCharCode; charCode <= endCharCode; charCode++) {
-      const character = String.fromCharCode(charCode);
-      this.characters.push(character);
-    }
-  }
 
   showAllEmployees(): void {
     this.selectedCharacter = '';
@@ -91,12 +87,12 @@ paginationFilter(): void {
   this.filteredEmployeesEvent.emit(this.filtereddEmployees);
 }
   
-  addEmployee(employee: any): void {
+  addEmployee(employee: Employee): void {
     this.employees.push(employee);
     this.hideEmployeeForm();
   }
 
-  updateEmployee(updatedEmployee: any): void {
+  updateEmployee(updatedEmployee: Employee): void {
     this.employeeService.updateEmployee(updatedEmployee);
   }
 
@@ -109,7 +105,7 @@ paginationFilter(): void {
     this.isFormVisible = false;
   }
 
-  excludeMatchingNames(employees: any[], searchValue: string, filterBy: string): any[] {
+  excludeMatchingNames(employees: Employee[], searchValue: string, filterBy: string): Employee[] {
     return employees.filter((employee: { firstname: string, designation: string, department: string }) => {
       let searchProperty: string;
       if (filterBy === 'preferredName') {
