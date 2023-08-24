@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from '../../services/employee.service';
-import { Router } from '@angular/router';
 import { Employee } from '../../models/employee.model';
 import { NAME_PATTERN, EMAIL_PATTERN } from '../../constants/constants';
 import { Utility } from '../../common/utility.service';
@@ -14,10 +13,10 @@ import { Utility } from '../../common/utility.service';
 
 export class EmployeeFormComponent {
   @Input() isFormVisible: boolean = false;
-  @Input() employee: Employee | undefined;
+  @Input() employee!: Employee ;
   @Output() addEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   @Output() hideFormEvent = new EventEmitter<void>();
-  @Input() selectedEmployee: Employee | undefined;
+  @Input() selectedEmployee!: Employee ;
   @Input() editMode: boolean = false;
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   addClicked: boolean = false;
@@ -26,7 +25,6 @@ export class EmployeeFormComponent {
   constructor(
     private formBuilder: FormBuilder,
     private employeeService: EmployeeService,
-    private router: Router,
     private utility: Utility
   ) { }
 
@@ -50,11 +48,6 @@ export class EmployeeFormComponent {
     if (this.employee) {
       this.formGroup.patchValue(this.employee);
     }
-  }
-
-  getFormControlValue(controlName: string): any {
-    const control = this.formGroup.get(controlName);
-    return control ? control.value : null;
   }
 
   addEmployee(): void {

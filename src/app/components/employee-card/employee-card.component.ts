@@ -8,14 +8,15 @@ import { Employee } from 'src/app/models/employee.model';
   templateUrl: './employee-card.component.html',
   styleUrls: ['./employee-card.component.scss']
 })
+
 export class EmployeeCardComponent {
-  @Input() employee: Employee | null = null;
-  @Input() updatedEmployee: Employee | null = null;
+  @Input() employee!: Employee ;
+  @Input() updatedEmployee!: Employee ;
   @Input() isSelected = false;
   editMode: boolean = false;
   isFormVisible: boolean = false;
   isDeleteConfirmation: boolean = false;
-  selectedEmployee: Employee | null = null;
+  selectedEmployee!: Employee;
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   @Output() employeeDeleted: EventEmitter<void> = new EventEmitter<void>();
 
@@ -23,7 +24,6 @@ export class EmployeeCardComponent {
 
   showEditForm() {
     this.editMode = false;
-    this.selectedEmployee = null;
   }
 
   showEmployeeForm(editedEmployee: Employee) {
@@ -46,7 +46,7 @@ export class EmployeeCardComponent {
       this.employeeService.deleteEmployee(this.selectedEmployee);
       this.isDeleteConfirmation = false;
       this.employeeDeleted.emit();
-      this.hideForm(); // This line is important to hide the delete confirmation popup
+      this.hideForm(); 
     }
   }
 

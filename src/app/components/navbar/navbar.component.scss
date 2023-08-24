@@ -1,20 +1,20 @@
-.main-content{
+.main-content {
   display: flex;
   width: 81%;
   flex-direction: column;
 }
 
-.alpha-navbar{
+.alpha-navbar {
   display: flex;
   justify-content: space-between;
 }
 
 .alpha-navbar .alpha-btn:active,
 .alpha-navbar .alpha-btn:focus {
-color: #201e1e;
+  color: #201e1e;
 }
 
-.alpha-btn{
+.alpha-btn {
   font-size: 20px;
   height: 5vh;
   width: 2.5vw;
@@ -25,33 +25,37 @@ color: #201e1e;
   cursor: pointer;
 }
 
-.search-filter-add-container{
+.search-filter-add-container {
   display: flex;
   flex-direction: row;
   margin-top: 16px;
   justify-content: space-between;
 }
-.left-search-cont{
+
+.left-search-cont {
   display: flex;
   width: 60%;
 }
-.search-bar{
+
+.search-bar {
   width: 30%;
   display: flex;
   border: 1px solid rgba(87, 82, 82, 0.9);
   padding-left: 1%;
 }
-.search-area{
-  /* height: 30px; */
+
+.search-area {
   width: 200px;
   margin-left: 5px;
   border-width: 0px;
   outline: none;
 }
-.search-logo{
+
+.search-logo {
   align-self: center;
 }
-.clear-btn{
+
+.clear-btn {
   width: 66px;
   height: 40px;
   background-color: #69BA00;
@@ -61,14 +65,15 @@ color: #201e1e;
   margin-left: 26px;
   margin-right: 30px;
 }
-.select-menu{
+
+.select-menu {
   width: 136px;
   outline: none;
   background-repeat: no-repeat;
   background-size: 0.5rem auto;
 }
 
-.add-emp-btn{
+.add-emp-btn {
   font-size: 16px;
   border-width: 0px;
   background-color: #00B1FC;
@@ -78,19 +83,21 @@ color: #201e1e;
   cursor: pointer;
 }
 
-.label{
+.label {
   font-size: 12px;
   font-weight: 500;
   color: #5d5959;
   align-self: center;
   margin-right: 8px;
 }
-.note{
+
+.note {
   padding-top: 10px;
   font-size: 12px;
   font-weight: 600;
 }
-.note-desc{
+
+.note-desc {
   font-size: 12px;
   font-weight: 400;
 }

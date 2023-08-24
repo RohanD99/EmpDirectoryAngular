@@ -16,7 +16,7 @@ export class CardContainerComponent implements OnInit, OnDestroy {
   @Input() employees: Employee[] = [];
   @Output() noEmployeesMessageEvent = new EventEmitter<string>();
   isFormVisible: boolean = false;
-  selectedEmployee: Employee | null = null;
+  selectedEmployee!: Employee ;
   formGroup!: FormGroup;
   @Input() filteredEmployees: Employee[] = [];
   @Input() noEmployeesMessage: string = '';
