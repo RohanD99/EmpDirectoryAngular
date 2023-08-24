@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from '../employee-services/employee.service';
+import { EmployeeService } from '../../services/employee.service';
 import { Router } from '@angular/router';
-import { Employee } from '../models/employee.model';
-import { NAME_PATTERN, EMAIL_PATTERN } from '../constants/constants';
-import { Utility } from '../common/utility.service';
+import { Employee } from '../../models/employee.model';
+import { NAME_PATTERN, EMAIL_PATTERN } from '../../constants/constants';
+import { Utility } from '../../common/utility.service';
 
 @Component({
   selector: 'app-employee-form',

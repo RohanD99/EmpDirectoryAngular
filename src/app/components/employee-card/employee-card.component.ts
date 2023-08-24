@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EmployeeService } from 'src/app/employee-services/employee.service';
+import { EmployeeService } from 'src/app/services/employee.service';
 import { Router } from '@angular/router';
 import { Employee } from 'src/app/models/employee.model';
 

@@ -1,12 +1,12 @@
 // employees.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarComponent } from '../sidebar/sidebar.component';
-import { NavbarComponent } from '../navbar/navbar.component';
-import { CardContainerComponent } from '../card-assets/card-container/card-container.component';
-import { EmployeeFormComponent } from '../employee-form/employee-form.component';
-import { EmployeeCardComponent } from '../card-assets/employee-card/employee-card.component'; 
-import { EmployeeService } from '../employee-services/employee.service';
+import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { NavbarComponent } from '../components/navbar/navbar.component';
+import { CardContainerComponent } from '../components/card-container/card-container.component';
+import { EmployeeFormComponent } from '../components/employee-form/employee-form.component';
+import { EmployeeCardComponent } from '../components/employee-card/employee-card.component'; 
+import { EmployeeService } from '../services/employee.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HeaderModule } from './header.module';

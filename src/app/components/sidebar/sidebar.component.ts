@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EmployeeService } from '../employee-services/employee.service';
+import { EmployeeService } from '../../services/employee.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { Employee } from '../models/employee.model';
+import { Employee } from '../../models/employee.model';
 
 @Component({
   selector: 'app-sidebar',

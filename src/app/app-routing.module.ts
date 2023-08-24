@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EmployeeFormComponent } from './employee-form/employee-form.component';
-import { EmployeeCardComponent } from './card-assets/employee-card/employee-card.component';
+import { EmployeeFormComponent } from './components/employee-form/employee-form.component';
+import { EmployeeCardComponent } from './components/employee-card/employee-card.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
