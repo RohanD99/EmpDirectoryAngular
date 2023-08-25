@@ -3,6 +3,7 @@ import { EmployeeService } from '../../../../services/employee.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { Employee } from '../../../../models/employee.model';
 import { EmployeeSelectedFilter } from '../../../../models/employee.model';
+import { emptyEmpMessage } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,6 +24,7 @@ export class SidebarComponent {
   sections: { heading: string, items: any[] }[] = [];
   filteredEmployees: Employee[] = [];
   @Output() filteredEmployees$: EventEmitter<Employee[]> = new EventEmitter<Employee[]>();
+  emptyEmpMessage = emptyEmpMessage;
 
   constructor(private employeeService: EmployeeService, private router: Router) { }
 
@@ -121,6 +123,10 @@ export class SidebarComponent {
     }
 
     this.filterEmployeesBySelectedFilters();
+    if (this.filteredEmployees.length === 0) {
+      this.emptyEmpMessage;
+    }
+
   }
 
   filterEmployeesBySelectedFilters(): void {
@@ -138,5 +144,8 @@ export class SidebarComponent {
     });
 
     this.filteredEmployees$.emit(this.filteredEmployees);
+    if (this.filteredEmployees.length === 0) {
+      this.emptyEmpMessage;
+    }
   } 
 }

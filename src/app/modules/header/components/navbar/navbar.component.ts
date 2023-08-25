@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Employee } from '../../../../models/employee.model';
 import { Utility } from '../../../../common/utility.service';
 import { EmployeeSelectedFilter } from '../../../../models/employee.model';
+import { emptyEmpMessage } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-navbar',
@@ -14,23 +15,22 @@ import { EmployeeSelectedFilter } from '../../../../models/employee.model';
 export class NavbarComponent {
   selectedFilters: EmployeeSelectedFilter = new EmployeeSelectedFilter(); // Initialize the filter
   filteredEmployees: Employee[] = [];
-  filtereddEmployees: { firstname: string, designation: string, department: string }[] = [];    //Filtering employees based on filters
-  characters: string[] = [];         // Selected characters on button
-  @Input() employees: Employee[] = [];    // Send to card-cont.
-  selectedCharacter: string = '';    // Initially empty character string
-  searchValue: string = '';          // Initially empty search value string
+  characters: string[] = [];                                              // Selected characters on button
+  @Input() employees: Employee[] = [];                                    // Send to card-cont.
+  selectedCharacter: string = '';                                         // Initially empty character string
+  searchValue: string = '';                                               // Initially empty search value string
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
-  noEmployeesMessage: string = '';
+  emptyEmpMessage = emptyEmpMessage;
 
   constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility) {
     this.characters = this.utility.generateAlphabets();
-    this.filtereddEmployees = this.employees;                // Initialize filteredEmployees with all employees
+    this.filteredEmployees = this.employees; 
   }
 
   showAllEmployees(): void {
     this.selectedCharacter = '';
     const employees = this.employeeService.loadEmployeesFromLocalStorage();
-    this.filtereddEmployees = employees ? employees : [];
+    this.filteredEmployees = employees ? employees : [];
     this.paginationFilter();
   }
 
@@ -44,24 +44,22 @@ export class NavbarComponent {
     const filterBy = (document.getElementById('filterBy') as HTMLSelectElement).value;
 
     const employees = this.employeeService.loadEmployeesFromLocalStorage();
-    this.filtereddEmployees = employees.filter((employee: { firstname: string, designation: string, department: string }) => {
-      let searchProperty: string;
-      if (filterBy === 'preferredName') {
-        searchProperty = employee.firstname.toLowerCase();
-      } else if (filterBy === 'designation') {
-        searchProperty = employee.designation.toLowerCase();
-      } else if (filterBy === 'department') {
-        searchProperty = employee.department.toLowerCase();
-      } else {
-        searchProperty = employee.firstname.toLowerCase();
-      }
+    this.filteredEmployees = employees.filter((employee: Employee) => {
+      const searchProperty =
+        filterBy === 'preferredName' ? employee.firstname.toLowerCase() :
+        filterBy === 'designation' ? employee.designation.toLowerCase() :
+        filterBy === 'department' ? employee.department.toLowerCase() :
+        employee.firstname.toLowerCase();
 
       return searchProperty.includes(searchValue);
     });
 
-    this.filteredEmployeesEvent.emit(this.filtereddEmployees);
-  }
+    if (this.filteredEmployees.length === 0) {
+      this.emptyEmpMessage;
+    }
 
+    this.filteredEmployeesEvent.emit(this.filteredEmployees);
+  }
 
   onClearAll(): void {
     this.searchValue = '';
@@ -74,9 +72,12 @@ export class NavbarComponent {
     }
     this.selectedCharacter = character;
     this.paginationFilter();
+    if (this.filteredEmployees.length === 0) {
+      this.emptyEmpMessage;
+    }
   }
 
-  //Alphabets filter
+  // Alphabets filter
   paginationFilter(): void {
     const employees = this.employeeService.loadEmployeesFromLocalStorage();
     const filteredEmployees = employees.filter((employee: Employee) => {
@@ -98,47 +99,22 @@ export class NavbarComponent {
     this.filteredEmployees = filteredEmployees;
     this.filteredEmployeesEvent.emit(this.filteredEmployees);
   }
+
   addEmployee(employee: Employee): void {
     this.employees.push(employee);
   }
 
   updateEmployee(updatedEmployee: Employee): void {
-    //this.employeeService.updateEmployee(updatedEmployee);
+    this.employeeService.updateEmployee(updatedEmployee);
   }
-
-  showEmployeeForm() {
-    this.utility.openForm(); // Assuming this triggers your "isFormVisible" property
-  }
-
-  showEmployeeModal() {
-    const modal = document.getElementById('employeeModal');
-    if (modal) {
-        modal.classList.add('show'); // Add the 'show' class to display the modal
-        modal.style.display = 'block'; // Set the display property to 'block'
-    }
-}
-
-// Method to close the modal
-hideEmployeeModal() {
-    const modal = document.getElementById('employeeModal');
-    if (modal) {
-        modal.classList.remove('show'); // Remove the 'show' class
-        modal.style.display = 'none'; // Set the display property to 'none'
-    }
-}
 
   excludeMatchingNames(employees: Employee[], searchValue: string, filterBy: string): Employee[] {
-    return employees.filter((employee: { firstname: string, designation: string, department: string }) => {
-      let searchProperty: string;
-      if (filterBy === 'preferredName') {
-        searchProperty = employee.firstname.toLowerCase();
-      } else if (filterBy === 'designation') {
-        searchProperty = employee.designation.toLowerCase();
-      } else if (filterBy === 'department') {
-        searchProperty = employee.department.toLowerCase();
-      } else {
-        searchProperty = employee.firstname.toLowerCase();
-      }
+    return employees.filter((employee: Employee) => {
+      const searchProperty =
+        filterBy === 'preferredName' ? employee.firstname.toLowerCase() :
+        filterBy === 'designation' ? employee.designation.toLowerCase() :
+        filterBy === 'department' ? employee.department.toLowerCase() :
+        employee.firstname.toLowerCase();
 
       const matchesPreferredName = filterBy !== 'preferredName' && employee.firstname.toLowerCase().includes(searchValue);
       const matchesDepartment = filterBy !== 'department' && employee.department.toLowerCase().includes(searchValue);
@@ -147,5 +123,4 @@ hideEmployeeModal() {
       return searchProperty.includes(searchValue) && !matchesPreferredName && !matchesDepartment && !matchesDesignation;
     });
   }
-
 }

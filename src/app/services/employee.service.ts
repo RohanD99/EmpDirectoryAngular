@@ -2,15 +2,18 @@ import { Injectable } from '@angular/core';
 import { Employee } from '../models/employee.model';
 import { EmployeeFormComponent } from '../modules/employee/components/employee-form/employee-form.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
+import { localStorageKey } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class EmployeeService {
-  private readonly localStorageKey = 'employees';
+  private allEmployees: any[] = [];
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal) {
+    this.allEmployees = this.initiate();
+   }
 
   openEmployeeFormModal() {
     const modalRef = this.modalService.open(EmployeeFormComponent, { size: 'lg' });
@@ -33,70 +36,36 @@ export class EmployeeService {
   }
 
   initiate(): Employee[] {
-    const employeesJson = localStorage.getItem(this.localStorageKey);
+    const employeesJson = localStorage.getItem(localStorageKey);
     return employeesJson ? JSON.parse(employeesJson) : [];
   }
 
   private saveEmployeesToLocalStorage(employees: any[]): void {
     const employeesJson = JSON.stringify(employees);
-    localStorage.setItem(this.localStorageKey, employeesJson);
+    localStorage.setItem(localStorageKey, employeesJson);
   }
 
-  // private emitEmployees(): void {
-  //   this.employeesSubject.next(this.allEmployees);
-  // }
-
-  addEmployee(employee: Employee): void {
+  addEmployee(employee: any): void {
     const newEmployee = { ...employee, id: this.generateUniqueId(employee) };
-    newEmployee.preferredName = `${newEmployee.firstname} ${newEmployee.lastname}`;
-    // this.allEmployees.push(newEmployee);
-    // this.saveEmployeesToLocalStorage(this.allEmployees);
-    // this.updateCounts();
-    // this.emitEmployees();
+    newEmployee.preferredName = `${newEmployee.firstname} ${newEmployee.lastname}`; 
+    this.allEmployees.push(newEmployee);
+    this.saveEmployeesToLocalStorage(this.allEmployees);
   }
-
-  updateEmployee(updatedEmployee: Employee): void {
-    // const index = this.allEmployees.findIndex((employee: any) => employee.id === updatedEmployee.id);
-    // if (index !== -1) {
-    //   this.allEmployees[index] = updatedEmployee;
-    //   this.saveEmployeesToLocalStorage(this.allEmployees);
-    //   this.updateCounts();
-    //   this.emitEmployees();
+  
+  updateEmployee(updatedEmployee: any): void {
+    const index = this.allEmployees.findIndex((employee: any) => employee.id === updatedEmployee.id);
+    if (index !== -1) {
+      this.allEmployees[index] = updatedEmployee;
+      this.saveEmployeesToLocalStorage(this.allEmployees);   
     }
   }
 
-  // deleteEmployee(employee: Employee): void {
-  //   const index = this.allEmployees.findIndex((emp: any) => emp.id === employee.id);
-  //   if (index !== -1) {
-  //     this.allEmployees.splice(index, 1);
-  //     this.saveEmployeesToLocalStorage(this.allEmployees);
-  //     this.updateCounts();
-  //     this.emitEmployees();
-  //   }
-  
-
-  // updateCounts(): void {
-  //   const employees = this.initiate();
-  //   const departmentCounts: Record<string, number> = {};
-  //   const designationCounts: Record<string, number> = {};
-  //   const locationCounts: Record<string, number> = {};
-
-  //   employees.forEach((employee: any) => {
-  //     const department = employee.department;
-  //     const designation = employee.designation;
-  //     const location = employee.location;
-
-  //     departmentCounts[department] = (departmentCounts[department] || 0) + 1;
-  //     designationCounts[designation] = (designationCounts[designation] || 0) + 1;
-  //     locationCounts[location] = (locationCounts[location] || 0) + 1;
-  //   });
-
-  //   this.departmentCounts.next(departmentCounts);
-  //   this.designationCounts.next(designationCounts);
-  //   this.locationCounts.next(locationCounts);
-  // }
-
-  // updateEmployees(employees: any[]): void {
-  //   this.employeesSubject.next(employees);
-  // }
+  deleteEmployee(employeeId: Employee): void {
+    const index = this.allEmployees.findIndex((employee: any) => employee.id === employeeId);
+    if (index !== -1) {
+      this.allEmployees.splice(index, 1);
+      this.saveEmployeesToLocalStorage(this.allEmployees);
+    }
+  }
+}
 

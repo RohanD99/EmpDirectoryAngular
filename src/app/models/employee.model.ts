@@ -8,12 +8,10 @@ export class Employee {
   mailId: string;
   location: string;
   skypeId: string;
-  preferredName: string; 
+  preferredName: string;
 
-  constructor(
-    args: any
-  ) {
-    args = !!args ? args : {};
+  constructor(args: any) {
+    args = args || {};
     this.id = args.id;
     this.firstname = args.firstname;
     this.lastname = args.lastname;
@@ -23,7 +21,7 @@ export class Employee {
     this.mailId = args.mailId;
     this.location = args.location;
     this.skypeId = args.skypeId;
-    this.preferredName = `${args.firstname} ${args.lastname}`; 
+    this.preferredName = `${args.firstname} ${args.lastname}`;
   }
 }
 

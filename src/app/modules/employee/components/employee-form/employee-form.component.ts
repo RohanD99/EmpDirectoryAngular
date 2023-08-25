@@ -2,9 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Employee } from 'src/app/models/employee.model';
-import { NAME_PATTERN,EMAIL_PATTERN } from 'src/app/constants/constants';
+import { NAME_PATTERN, EMAIL_PATTERN } from 'src/app/constants/constants';
 import { Utility } from 'src/app/common/utility.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-employee-form',
@@ -13,33 +12,20 @@ import { Subscription } from 'rxjs';
 })
 
 export class EmployeeFormComponent {
-  @Input() isFormVisible: boolean = false;
-  @Input() employee!: Employee ;
+  @Input() employee!: Employee;
   @Output() addEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
-  @Output() hideFormEvent = new EventEmitter<void>();
-  @Input() selectedEmployee!: Employee ;
- 
+  @Input() selectedEmployee!: Employee;
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   addClicked: boolean = false;
- 
-  @Input() editMode: boolean = false;
   @Output() formSubmit = new EventEmitter<any>();
   formGroup!: FormGroup;
-  isOpen: boolean = false;
-  
 
   constructor(
-    
     private formBuilder: FormBuilder,
     private employeeService: EmployeeService,
     private utility: Utility,
-    private isOpenSubscription: Subscription
   ) { }
 
-  hideForm(): void {
-    this.isFormVisible = false;
-    this.hideFormEvent.emit();
-  }
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
@@ -57,15 +43,9 @@ export class EmployeeFormComponent {
       this.formGroup.patchValue(this.employee);
     }
   }
-  showForm(): void {
-    this.isFormVisible = true;
-  }
-
- 
 
   closeForm() {
     this.formGroup.reset();
-    this.utility.closeForm(); 
   }
 
   addEmployee(): void {
@@ -74,19 +54,8 @@ export class EmployeeFormComponent {
       this.addClicked = true;
       return;
     }
-
-    const firstname = this.utility.getFormControlValue(this.formGroup, 'firstname');
-    const lastname = this.utility.getFormControlValue(this.formGroup, 'lastname');
-    const designation = this.utility.getFormControlValue(this.formGroup, 'designation');
-    const department = this.utility.getFormControlValue(this.formGroup, 'department');;
-    const mobile = this.utility.getFormControlValue(this.formGroup, 'mobile');
-    const mailId = this.utility.getFormControlValue(this.formGroup, 'mailId');
-    const location = this.utility.getFormControlValue(this.formGroup, 'location');
-    const skypeId = this.utility.getFormControlValue(this.formGroup, 'skypeId');
-
-    const employee = new Employee(
-      0, );
-
+    
+    const employee = new Employee(this.employee);
     this.addEmp.emit(employee);
     this.employeeService.addEmployee(employee);
     this.formGroup.reset();
@@ -103,10 +72,9 @@ export class EmployeeFormComponent {
         id: this.selectedEmployee.id,
         ...this.formGroup.value
       };
-      
+
       this.employeeService.updateEmployee(updatedEmployee);
       this.updateEmp.emit(updatedEmployee);
-      this.hideForm();
     }
   }
 }

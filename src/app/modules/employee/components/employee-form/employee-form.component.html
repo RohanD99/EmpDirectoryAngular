@@ -1,11 +1,9 @@
-
-
 <div class="add-employee-popup" id="popupForm">
   <div class="form-popup">
     <form class="form-container" id="myPopupForm" [formGroup]="formGroup">
       <div class="heading-cancel-cont">
-        <h5 *ngIf="!editMode" class="add-emp-head">Add Employee</h5>
-        <h5 *ngIf="editMode" class="edit-emp-head">Edit Employee</h5>
+        <h5 class="add-emp-head">Add Employee</h5>
+        <h5 class="edit-emp-head">Edit Employee</h5>
       </div>
 
       <div class="inp-warning-div">
@@ -138,9 +136,9 @@
         </div>
       </div>
       <div class="btn-container">
-        <button *ngIf="!editMode" type="button" name="add-btn" class="add-btn" id="onAddEmpBtn"
+        <button type="button" name="add-btn" class="add-btn" id="onAddEmpBtn"
           (click)="addEmployee()">Add</button>
-        <button *ngIf="editMode" type="button" name="edit-btn" class="edit-btn" id="onEditEmpBtn"
+        <button type="button" name="edit-btn" class="edit-btn" id="onEditEmpBtn"
           (click)="updateEmployee()">Update</button>
         <div class="error-message-btn"
           *ngIf="formGroup.invalid && formGroup.get('firstname')?.touched && formGroup.get('lastname')?.touched && addClicked">
