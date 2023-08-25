@@ -3,6 +3,7 @@ import { Employee } from '../models/employee.model';
 import { EmployeeFormComponent } from '../modules/employee/components/employee-form/employee-form.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { localStorageKey } from '../constants/constants';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,13 @@ export class EmployeeService {
 
   openEmployeeFormModal() {
     const modalRef = this.modalService.open(EmployeeFormComponent, { size: 'lg' });
+    return modalRef;
   }
+
+  closeEmployeeFormModal(modalRef: NgbModalRef) {
+  modalRef.close();
+}
+  
 
   generateUniqueId(employee: any): number {
     const currentTimestamp = new Date().getTime();

@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EmployeeService } from '../../../../services/employee.service';
 import { Router } from '@angular/router';
 import { Employee } from '../../../../models/employee.model';
 import { Utility } from '../../../../common/utility.service';
 import { EmployeeSelectedFilter } from '../../../../models/employee.model';
 import { emptyEmpMessage } from 'src/app/constants/constants';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-navbar',
@@ -22,7 +23,7 @@ export class NavbarComponent {
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
   emptyEmpMessage = emptyEmpMessage;
 
-  constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility) {
+  constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility,private modalRef: NgbModalRef) {
     this.characters = this.utility.generateAlphabets();
     this.filteredEmployees = this.employees; 
   }
@@ -36,6 +37,10 @@ export class NavbarComponent {
 
   openEmployeeModal() {
     this.employeeService.openEmployeeFormModal();
+  }
+
+  closeEmployeeModal(){
+    this.employeeService.closeEmployeeFormModal(this.modalRef);
   }
 
   onSearch(event: Event): void {

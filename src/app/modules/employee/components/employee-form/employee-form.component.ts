@@ -4,6 +4,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { Employee } from 'src/app/models/employee.model';
 import { NAME_PATTERN, EMAIL_PATTERN } from 'src/app/constants/constants';
 import { Utility } from 'src/app/common/utility.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-employee-form',
@@ -24,6 +25,7 @@ export class EmployeeFormComponent {
     private formBuilder: FormBuilder,
     private employeeService: EmployeeService,
     private utility: Utility,
+    private modalRef: NgbModalRef,
   ) { }
 
 
@@ -46,6 +48,7 @@ export class EmployeeFormComponent {
 
   closeForm() {
     this.formGroup.reset();
+    this.employeeService.closeEmployeeFormModal(this.modalRef);
   }
 
   addEmployee(): void {
@@ -54,7 +57,7 @@ export class EmployeeFormComponent {
       this.addClicked = true;
       return;
     }
-    
+
     const employee = new Employee(this.employee);
     this.addEmp.emit(employee);
     this.employeeService.addEmployee(employee);
