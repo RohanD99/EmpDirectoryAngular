@@ -20,7 +20,7 @@ export class CardContainerComponent implements OnInit, OnDestroy {
   formGroup!: FormGroup;
   @Input() filteredEmployees: Employee[] = [];
   @Input() noEmployeesMessage: string = '';
-  private employeesSubscription: Subscription;
+  // private employeesSubscription: Subscription;
   private allEmployees: Employee[] = [];
   department!: string;
   office!: string;
@@ -28,14 +28,14 @@ export class CardContainerComponent implements OnInit, OnDestroy {
   emptyMsg?: string;
 
   constructor(private router: Router, private employeeService: EmployeeService, private route: ActivatedRoute) {
-    this.employeesSubscription = this.employeeService.employees$.subscribe((employees: Employee[]) => {
-      this.allEmployees = employees;
-      this.emptyMsg = emptyEmpMessage;
-    });
+    // this.employeesSubscription = this.employeeService.employees$.subscribe((employees: Employee[]) => {
+    //   this.allEmployees = employees;
+    //   this.emptyMsg = emptyEmpMessage;
+    // });
   }
 
   ngOnDestroy() {
-    this.employeesSubscription.unsubscribe();
+    // this.employeesSubscription.unsubscribe();
   }
 
   openForm(employee: Employee): void {

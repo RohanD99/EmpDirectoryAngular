@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,17 @@ export class Utility {
   getFormControlValue(formGroup: FormGroup, controlName: string): any {
     const control: AbstractControl | null = formGroup.get(controlName);
     return control ? control.value : null;
+  }
+
+  private isOpenSubject = new Subject<boolean>();
+
+  isOpen$ = this.isOpenSubject.asObservable();
+
+  openForm() {
+    this.isOpenSubject.next(true);
+  }
+
+  closeForm() {
+    this.isOpenSubject.next(false);
   }
 }

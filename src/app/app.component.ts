@@ -7,72 +7,74 @@ import { Employee } from './models/employee.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+
+export class AppComponent implements OnInit {
   title = 'EmpDirectoryAngular';
   isFormVisible: boolean = false;
-  selectedEmployee: Employee | null = null;
-  editMode: boolean = false;
+selectedEmployee: Employee | null = null;
+
   employees: Employee[] = [];
-  @Input() noEmployeesMessage: string = '';
-  filteredEmployees: Employee[] = [];
-  selectedAlphabet: string = '';
-  searchTerm: string = '';
-  filterredEmployees: Employee[] = [];
+  // selectedFilters: EployeeSelectedFilter;
 
-  constructor(private employeeService: EmployeeService) {
-    const storedAlphabet = localStorage.getItem('selectedAlphabet');
-    if (storedAlphabet) {
-      this.selectedAlphabet = storedAlphabet;
-    }
-
-    const storedSearchTerm = localStorage.getItem('searchTerm');
-    if (storedSearchTerm) {
-      this.searchTerm = storedSearchTerm;
-    }
+  constructor(private employeeService: EmployeeService,) {
+    this.selectedEmployee = new Employee({});
+  }
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
   }
 
-  ngOnInit() {
-    this.employeeService.employees$.subscribe((employees: Employee[]) => {
-      this.employees = employees;
-      this.filteredEmployees = employees;
-      this.filterredEmployees = employees;
-    });
+  showEmployeeModal() {
+    this.isFormVisible = true;
+    const modal = document.getElementById('employeeModal');
+    if (modal) {
+        modal.classList.add('show'); // Add the 'show' class to display the modal
+        modal.style.display = 'block'; // Set the display property to 'block'
+    }
+}
 
-    this.getEmployees();
-  }
-
-  ngOnDestroy() { }
-
+// Method to close the modal
+hideEmployeeModal() {
+    this.isFormVisible = false;
+    const modal = document.getElementById('employeeModal');
+    if (modal) {
+        modal.classList.remove('show'); // Remove the 'show' class
+        modal.style.display = 'none'; // Set the display property to 'none'
+    }
+}
   getEmployees() {
     this.employeeService.initiate();
   }
 
   updateFilteredEmployees(filteredEmployees: Employee[]): void {
-    this.filteredEmployees = filteredEmployees;
+    // this.filteredEmployees = filteredEmployees;
   }
 
-  hideEmployeeForm() {
-    this.isFormVisible = false;
-    this.editMode = false;
+  showForm(employee: Employee | null = null) {
+    this.selectedEmployee = employee;
+    this.isFormVisible = true;
+  }
+  
+  hideForm() {
     this.selectedEmployee = null;
+    this.isFormVisible = false;
   }
 
   addEmployee(employee: Employee) {
     this.employeeService.addEmployee(employee);
-    this.hideEmployeeForm();
+    this.hideForm();
   }
-
+  
   updateEmployee(employee: Employee) {
     this.employeeService.updateEmployee(employee);
-    this.hideEmployeeForm();
+    this.hideForm();
   }
 
   handleFilteredEmployees(filteredEmployees: Employee[]): void {
-    this.filteredEmployees = filteredEmployees;
+    // this.filteredEmployees = filteredEmployees;
     console.log(filteredEmployees);
   }
 
   handleNavbarFilteredEmployees(filteredEmployees: Employee[]): void {
-    this.filteredEmployees = filteredEmployees;
+    // this.filteredEmployees = filteredEmployees;
   }
 }

@@ -1,9 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from '../../services/employee.service';
-import { Employee } from '../../models/employee.model';
-import { NAME_PATTERN, EMAIL_PATTERN } from '../../constants/constants';
-import { Utility } from '../../common/utility.service';
+import { EmployeeService } from 'src/app/services/employee.service';
+import { Employee } from 'src/app/models/employee.model';
+import { NAME_PATTERN,EMAIL_PATTERN } from 'src/app/constants/constants';
+import { Utility } from 'src/app/common/utility.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-employee-form',
@@ -17,15 +18,22 @@ export class EmployeeFormComponent {
   @Output() addEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   @Output() hideFormEvent = new EventEmitter<void>();
   @Input() selectedEmployee!: Employee ;
-  @Input() editMode: boolean = false;
+ 
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   addClicked: boolean = false;
+ 
+  @Input() editMode: boolean = false;
+  @Output() formSubmit = new EventEmitter<any>();
   formGroup!: FormGroup;
+  isOpen: boolean = false;
+  
 
   constructor(
+    
     private formBuilder: FormBuilder,
     private employeeService: EmployeeService,
-    private utility: Utility
+    private utility: Utility,
+    private isOpenSubscription: Subscription
   ) { }
 
   hideForm(): void {
@@ -49,6 +57,16 @@ export class EmployeeFormComponent {
       this.formGroup.patchValue(this.employee);
     }
   }
+  showForm(): void {
+    this.isFormVisible = true;
+  }
+
+ 
+
+  closeForm() {
+    this.formGroup.reset();
+    this.utility.closeForm(); 
+  }
 
   addEmployee(): void {
     if (this.formGroup.invalid) {
@@ -67,16 +85,7 @@ export class EmployeeFormComponent {
     const skypeId = this.utility.getFormControlValue(this.formGroup, 'skypeId');
 
     const employee = new Employee(
-      0,
-      firstname,
-      lastname,
-      designation,
-      department,
-      mobile,
-      mailId,
-      location,
-      skypeId,
-    );
+      0, );
 
     this.addEmp.emit(employee);
     this.employeeService.addEmployee(employee);

@@ -11,25 +11,24 @@ export class Employee {
   preferredName: string; 
 
   constructor(
-    id: number,
-    firstname: string,
-    lastname: string,
-    designation: string,
-    department: string,
-    mobile: string,
-    mailId: string,
-    location: string,
-    skypeId: string
+    args: any
   ) {
-    this.id = id;
-    this.firstname = firstname;
-    this.lastname = lastname;
-    this.designation = designation;
-    this.department = department;
-    this.mobile = mobile;
-    this.mailId = mailId;
-    this.location = location;
-    this.skypeId = skypeId;
-    this.preferredName = `${firstname} ${lastname}`; 
+    args = !!args ? args : {};
+    this.id = args.id;
+    this.firstname = args.firstname;
+    this.lastname = args.lastname;
+    this.designation = args.designation;
+    this.department = args.department;
+    this.mobile = args.mobile;
+    this.mailId = args.mailId;
+    this.location = args.location;
+    this.skypeId = args.skypeId;
+    this.preferredName = `${args.firstname} ${args.lastname}`; 
   }
+}
+
+export class EmployeeSelectedFilter {
+  jobtitle: string[] = [];
+  departments: string[] = [];
+  offices: string[] = [];
 }

@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EmployeeService } from '../../services/employee.service';
+import { EmployeeService } from '../../../../services/employee.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { Employee } from '../../models/employee.model';
+import { Employee } from '../../../../models/employee.model';
+import { EmployeeSelectedFilter } from '../../../../models/employee.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,6 +11,7 @@ import { Employee } from '../../models/employee.model';
 })
 
 export class SidebarComponent {
+  selectedFilters: EmployeeSelectedFilter = new EmployeeSelectedFilter();
   departments: string[] = [];
   offices: string[] = [];
   jobTitles: string[] = [];
@@ -26,19 +28,6 @@ export class SidebarComponent {
 
   ngOnInit(): void {
     this.allEmployees = this.employeeService.loadEmployeesFromLocalStorage();
-
-    this.employeeService.departmentCounts$.subscribe(counts => {
-      this.departmentCounts = counts;
-    });
-
-    this.employeeService.designationCounts$.subscribe(counts => {
-      this.designationCounts = counts;
-    });
-
-    this.employeeService.locationCounts$.subscribe(counts => {
-      this.locationCounts = counts;
-    });
-
     this.departments = [...new Set(this.allEmployees.map(employee => employee.department))];
     this.offices = [...new Set(this.allEmployees.map(employee => employee.location))];
     this.jobTitles = [...new Set(this.allEmployees.map(employee => employee.designation))];
@@ -111,21 +100,19 @@ export class SidebarComponent {
   }
 
   applyFilters(filterType: string, filterValue: string): void {
-    let filteredEmployees: Employee[] = [];
-
     switch (filterType) {
       case 'department':
-        filteredEmployees = this.allEmployees.filter(employee => employee.department === filterValue);
+        this.selectedFilters.departments = [filterValue];
         this.router.navigateByUrl(`/department/${filterValue}`);
         break;
 
       case 'offices':
-        filteredEmployees = this.allEmployees.filter(employee => employee.location === filterValue);
+        this.selectedFilters.offices = [filterValue];
         this.router.navigateByUrl(`/offices/${filterValue}`);
         break;
 
       case 'jobTitles':
-        filteredEmployees = this.allEmployees.filter(employee => employee.designation === filterValue);
+        this.selectedFilters.jobtitle = [filterValue];
         this.router.navigateByUrl(`/jobTitles/${filterValue}`);
         break;
 
@@ -133,6 +120,23 @@ export class SidebarComponent {
         break;
     }
 
-    this.filteredEmployees$.emit(filteredEmployees);
+    this.filterEmployeesBySelectedFilters();
   }
+
+  filterEmployeesBySelectedFilters(): void {
+    this.filteredEmployees = this.allEmployees.filter(employee => {
+      const matchesJobTitle = this.selectedFilters.jobtitle.length === 0 ||
+        this.selectedFilters.jobtitle.includes(employee.designation);
+
+      const matchesDepartment = this.selectedFilters.departments.length === 0 ||
+        this.selectedFilters.departments.includes(employee.department);
+
+      const matchesOffice = this.selectedFilters.offices.length === 0 ||
+        this.selectedFilters.offices.includes(employee.location);
+
+      return matchesJobTitle && matchesDepartment && matchesOffice;
+    });
+
+    this.filteredEmployees$.emit(this.filteredEmployees);
+  } 
 }

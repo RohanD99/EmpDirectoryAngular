@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EmployeeService } from '../../services/employee.service';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { EmployeeService } from '../../../../services/employee.service';
 import { Router } from '@angular/router';
-import { Employee } from '../../models/employee.model';
-import { Utility } from '../../common/utility.service';
+import { Employee } from '../../../../models/employee.model';
+import { Utility } from '../../../../common/utility.service';
+import { EmployeeSelectedFilter } from '../../../../models/employee.model';
 
 @Component({
   selector: 'app-navbar',
@@ -11,29 +12,30 @@ import { Utility } from '../../common/utility.service';
 })
 
 export class NavbarComponent {
+  selectedFilters: EmployeeSelectedFilter = new EmployeeSelectedFilter(); // Initialize the filter
+  filteredEmployees: Employee[] = [];
   filtereddEmployees: { firstname: string, designation: string, department: string }[] = [];    //Filtering employees based on filters
   characters: string[] = [];         // Selected characters on button
-  isFormVisible: boolean = false;
   @Input() employees: Employee[] = [];    // Send to card-cont.
   selectedCharacter: string = '';    // Initially empty character string
   searchValue: string = '';          // Initially empty search value string
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
   noEmployeesMessage: string = '';
 
-
-
   constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility) {
     this.characters = this.utility.generateAlphabets();
     this.filtereddEmployees = this.employees;                // Initialize filteredEmployees with all employees
   }
-
-
 
   showAllEmployees(): void {
     this.selectedCharacter = '';
     const employees = this.employeeService.loadEmployeesFromLocalStorage();
     this.filtereddEmployees = employees ? employees : [];
     this.paginationFilter();
+  }
+
+  openEmployeeModal() {
+    this.employeeService.openEmployeeFormModal();
   }
 
   onSearch(event: Event): void {
@@ -77,33 +79,53 @@ export class NavbarComponent {
   //Alphabets filter
   paginationFilter(): void {
     const employees = this.employeeService.loadEmployeesFromLocalStorage();
-    const filteredEmployees = employees.filter((employee: { firstname: string }) => {
+    const filteredEmployees = employees.filter((employee: Employee) => {
       const startsWithCharacter = !this.selectedCharacter ||
         employee.firstname.charAt(0).toLowerCase() === this.selectedCharacter.toLowerCase();
-      return startsWithCharacter;
+
+      const matchesJobTitle = this.selectedFilters.jobtitle.length === 0 ||
+        this.selectedFilters.jobtitle.includes(employee.designation);
+
+      const matchesDepartment = this.selectedFilters.departments.length === 0 ||
+        this.selectedFilters.departments.includes(employee.department);
+
+      const matchesOffice = this.selectedFilters.offices.length === 0 ||
+        this.selectedFilters.offices.includes(employee.location);
+
+      return startsWithCharacter && matchesJobTitle && matchesDepartment && matchesOffice;
     });
 
-    this.filtereddEmployees = filteredEmployees;
-    this.filteredEmployeesEvent.emit(this.filtereddEmployees);
+    this.filteredEmployees = filteredEmployees;
+    this.filteredEmployeesEvent.emit(this.filteredEmployees);
   }
-
   addEmployee(employee: Employee): void {
     this.employees.push(employee);
-    this.hideEmployeeForm();
   }
 
   updateEmployee(updatedEmployee: Employee): void {
-    this.employeeService.updateEmployee(updatedEmployee);
+    //this.employeeService.updateEmployee(updatedEmployee);
   }
 
   showEmployeeForm() {
-    this.isFormVisible = true;
-    this.router.navigateByUrl('/add');
+    this.utility.openForm(); // Assuming this triggers your "isFormVisible" property
   }
 
-  hideEmployeeForm() {
-    this.isFormVisible = false;
-  }
+  showEmployeeModal() {
+    const modal = document.getElementById('employeeModal');
+    if (modal) {
+        modal.classList.add('show'); // Add the 'show' class to display the modal
+        modal.style.display = 'block'; // Set the display property to 'block'
+    }
+}
+
+// Method to close the modal
+hideEmployeeModal() {
+    const modal = document.getElementById('employeeModal');
+    if (modal) {
+        modal.classList.remove('show'); // Remove the 'show' class
+        modal.style.display = 'none'; // Set the display property to 'none'
+    }
+}
 
   excludeMatchingNames(employees: Employee[], searchValue: string, filterBy: string): Employee[] {
     return employees.filter((employee: { firstname: string, designation: string, department: string }) => {

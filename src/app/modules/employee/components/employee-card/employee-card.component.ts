@@ -43,7 +43,7 @@ export class EmployeeCardComponent {
 
   confirmDelete() {
     if (this.selectedEmployee) {
-      this.employeeService.deleteEmployee(this.selectedEmployee);
+      // this.employeeService.deleteEmployee(this.selectedEmployee);
       this.isDeleteConfirmation = false;
       this.employeeDeleted.emit();
       this.hideForm(); 
@@ -51,7 +51,7 @@ export class EmployeeCardComponent {
   }
 
   updateEmployee(updatedEmployee: Employee) {
-    this.employeeService.updateEmployee(updatedEmployee);
+    // this.employeeService.updateEmployee(updatedEmployee);
     this.updateEmp.emit(updatedEmployee);
     this.hideForm();
   }

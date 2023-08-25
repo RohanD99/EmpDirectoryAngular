@@ -2,14 +2,12 @@
     <app-header></app-header>
     <div class="content-container">
         <div class="sidebar-container">
-            <app-sidebar (filteredEmployees$)="handleFilteredEmployees($event)"></app-sidebar>
+            <app-sidebar ></app-sidebar>
         </div>
         <div class="top-nav-container">
-            <app-navbar (filteredEmployeesEvent)="handleNavbarFilteredEmployees($event)"></app-navbar>
-            <app-employee-form *ngIf="isFormVisible" [isFormVisible]="isFormVisible"></app-employee-form>
+            <app-navbar ></app-navbar>
             <div class="card-container">
-                <app-card-container class="user-cards" [employees]="filteredEmployees"
-                    [noEmployeesMessage]="noEmployeesMessage"></app-card-container>
+                <app-card-container class="user-cards" ></app-card-container>                 
             </div>
         </div>
     </div>
