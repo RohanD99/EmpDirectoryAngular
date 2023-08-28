@@ -29,4 +29,5 @@ export class EmployeeSelectedFilter {
   jobtitle: string[] = [];
   departments: string[] = [];
   offices: string[] = [];
+  [key: string]: string[];
 }

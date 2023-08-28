@@ -30,5 +30,4 @@ export class AppComponent {
   updateEmployee(employee: Employee) {
     this.employeeService.updateEmployee(employee);
   }
-
 }

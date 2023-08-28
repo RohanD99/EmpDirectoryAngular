@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { FormGroup } from '@angular/forms';
 import { Employee } from 'src/app/models/employee.model';
@@ -12,12 +11,11 @@ import { Employee } from 'src/app/models/employee.model';
 
 export class CardContainerComponent implements OnInit {
   @Input() employees: Employee[] = [];
-  selectedEmployee!: Employee;
   formGroup!: FormGroup;
   @Input() filteredEmployees: Employee[] = [];
   private allEmployees: Employee[] = [];
 
-  constructor(private router: Router, private employeeService: EmployeeService, private route: ActivatedRoute) { }
+  constructor(private employeeService: EmployeeService) { }
 
   ngOnInit() {
     this.loadEmployees();

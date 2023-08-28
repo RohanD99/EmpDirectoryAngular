@@ -6,11 +6,12 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { HeaderModule } from './modules/header/nav.module';
 import { EmployeesModule } from './modules/employee/employees.module'; 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -20,9 +21,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     RouterModule,
     HeaderModule,
-    EmployeesModule, 
+    EmployeesModule,
+    NgbModalModule
   ],
   bootstrap: [AppComponent],
+  providers: [],
   exports: [],
 })
 export class AppModule {}

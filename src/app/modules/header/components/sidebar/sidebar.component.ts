@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { EmployeeService } from '../../../../services/employee.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { Employee } from '../../../../models/employee.model';
@@ -30,10 +30,12 @@ export class SidebarComponent {
 
   ngOnInit(): void {
     this.allEmployees = this.employeeService.loadEmployeesFromLocalStorage();
+    //For Counts
     this.departments = [...new Set(this.allEmployees.map(employee => employee.department))];
     this.offices = [...new Set(this.allEmployees.map(employee => employee.location))];
     this.jobTitles = [...new Set(this.allEmployees.map(employee => employee.designation))];
 
+    //For Dynamic titles
     this.sections = [
       {
         heading: 'Departments',
@@ -70,6 +72,7 @@ export class SidebarComponent {
       },
     ];
 
+    //routing
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const urlSegments = event.url.split('/');
@@ -126,8 +129,9 @@ export class SidebarComponent {
     if (this.filteredEmployees.length === 0) {
       this.emptyEmpMessage;
     }
-
   }
+
+  
 
   filterEmployeesBySelectedFilters(): void {
     this.filteredEmployees = this.allEmployees.filter(employee => {
@@ -147,5 +151,5 @@ export class SidebarComponent {
     if (this.filteredEmployees.length === 0) {
       this.emptyEmpMessage;
     }
-  } 
+  }
 }

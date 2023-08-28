@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Employee } from '../../../../models/employee.model';
 import { Utility } from '../../../../common/utility.service';
 import { EmployeeSelectedFilter } from '../../../../models/employee.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { emptyEmpMessage } from 'src/app/constants/constants';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-navbar',
@@ -22,8 +22,10 @@ export class NavbarComponent {
   searchValue: string = '';                                               // Initially empty search value string
   @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
   emptyEmpMessage = emptyEmpMessage;
+  closeResult = '';
 
-  constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility,private modalRef: NgbModalRef) {
+
+  constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility,private modalService: NgbModal) {
     this.characters = this.utility.generateAlphabets();
     this.filteredEmployees = this.employees; 
   }
@@ -33,14 +35,6 @@ export class NavbarComponent {
     const employees = this.employeeService.loadEmployeesFromLocalStorage();
     this.filteredEmployees = employees ? employees : [];
     this.paginationFilter();
-  }
-
-  openEmployeeModal() {
-    this.employeeService.openEmployeeFormModal();
-  }
-
-  closeEmployeeModal(){
-    this.employeeService.closeEmployeeFormModal(this.modalRef);
   }
 
   onSearch(event: Event): void {

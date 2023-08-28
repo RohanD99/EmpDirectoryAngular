@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Employee } from '../models/employee.model';
-import { EmployeeFormComponent } from '../modules/employee/components/employee-form/employee-form.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { localStorageKey } from '../constants/constants';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +9,11 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 export class EmployeeService {
   private allEmployees: any[] = [];
 
-  constructor(private modalService: NgbModal) {
+  constructor() {
     this.allEmployees = this.initiate();
    }
 
-  openEmployeeFormModal() {
-    const modalRef = this.modalService.open(EmployeeFormComponent, { size: 'lg' });
-    return modalRef;
-  }
-
-  closeEmployeeFormModal(modalRef: NgbModalRef) {
-  modalRef.close();
-}
-  
-
-  generateUniqueId(employee: any): number {
+  generateUniqueId(employee: Employee): number {
     const currentTimestamp = new Date().getTime();
     const maxId = employee && employee.id ? employee.id : 0;
     const uniqueId = Math.max(maxId + 1, currentTimestamp);
@@ -34,12 +21,17 @@ export class EmployeeService {
   }
 
   loadEmployeesFromLocalStorage() {
-    const employeesFromLocalStorage = localStorage.getItem('employees');
+    const employeesFromLocalStorage = localStorage.getItem(localStorageKey);
     let result: any;
     if (employeesFromLocalStorage) {
       result = JSON.parse(employeesFromLocalStorage);
     }
     return result;
+  }
+
+  getEmployeesFromLocalStorage(): any[] {
+    const employeesJson = localStorage.getItem(localStorageKey);
+    return employeesJson ? JSON.parse(employeesJson) : [];
   }
 
   initiate(): Employee[] {
@@ -67,12 +59,12 @@ export class EmployeeService {
     }
   }
 
-  deleteEmployee(employeeId: Employee): void {
-    const index = this.allEmployees.findIndex((employee: any) => employee.id === employeeId);
+  deleteEmployee(employeeId: number): void {
+    const index = this.allEmployees.findIndex((employee: Employee) => employee.id === employeeId);
     if (index !== -1) {
       this.allEmployees.splice(index, 1);
       this.saveEmployeesToLocalStorage(this.allEmployees);
     }
-  }
+  }  
 }
 

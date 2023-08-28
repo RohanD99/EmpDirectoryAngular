@@ -4,7 +4,7 @@
     <div *ngFor="let item of section.items">
       <a class="nav-element" [routerLink]="item.routerLink" [id]="item.id" (click)="applyFilters(item.type, item.name)">
         {{ item.displayName }}</a>
-      <span class="nav-element" [innerText]="'(' + (item.count || 0) + ')'"></span>
+        <span class="nav-element" [innerText]="'(' + (item.count || 0) + ')'"></span>
     </div>
   </div>
 </ng-container>
