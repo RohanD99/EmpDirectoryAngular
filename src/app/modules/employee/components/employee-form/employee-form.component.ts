@@ -1,13 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { Employee } from 'src/app/models/employee.model';
-import { NAME_PATTERN, EMAIL_PATTERN } from 'src/app/constants/constants';
-import { Utility } from 'src/app/common/utility.service';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-employee-form',
+  selector: 'employee-form',
   templateUrl: './employee-form.component.html',
   styleUrls: ['./employee-form.component.scss']
 })
@@ -18,27 +16,27 @@ export class EmployeeFormComponent {
   @Input() selectedEmployee!: Employee;
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   addClicked: boolean = false;
-  @Output() formSubmit = new EventEmitter<any>();
   formGroup!: FormGroup;
+  closeResult = '';
+  modalRef!: NgbModalRef;
+  isEditing: boolean = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    public modalService: NgbModal,
     private employeeService: EmployeeService,
-    private utility: Utility,
-    private modalRef: NgbModalRef,
+    private formBuilder: FormBuilder,
   ) { }
-
 
   ngOnInit() {
     this.formGroup = this.formBuilder.group({
-      firstname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
-      lastname: ['', [Validators.required, Validators.pattern(NAME_PATTERN)]],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       designation: ['', Validators.required],
       department: ['', Validators.required],
       mobile: ['', Validators.required],
-      mailId: ['', [Validators.required, Validators.pattern(EMAIL_PATTERN)]],
+      mailId: ['', [Validators.required, Validators.email]],
       location: ['', Validators.required],
-      skypeId: ['', Validators.required],
+      skypeId: ['', Validators.required]
     });
 
     if (this.employee) {
@@ -46,9 +44,32 @@ export class EmployeeFormComponent {
     }
   }
 
-  closeForm() {
-    this.formGroup.reset();
-    this.employeeService.closeEmployeeFormModal(this.modalRef);
+  isFieldInvalid(fieldName: string) {
+    const control = this.formGroup.get(fieldName);
+    return control?.invalid && (control?.touched || control?.dirty);
+  }
+
+  open(content: TemplateRef<any>) {
+    const modalRef: NgbModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+
+    modalRef.result.then(
+      (result: any) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+
+  private getDismissReason(reason: string | ModalDismissReasons): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
   addEmployee(): void {
@@ -58,10 +79,18 @@ export class EmployeeFormComponent {
       return;
     }
 
-    const employee = new Employee(this.employee);
-    this.addEmp.emit(employee);
-    this.employeeService.addEmployee(employee);
+    const newEmployee: Employee = {
+      ...this.formGroup.value,
+      id: this.employeeService.generateUniqueId(this.employee)
+    };
+
+    this.addEmp.emit(newEmployee);
+    this.employeeService.addEmployee(newEmployee);
     this.formGroup.reset();
+  }
+
+  populateForm(employee: Employee) {
+    this.employee = { ...employee };
   }
 
   updateEmployee(): void {
