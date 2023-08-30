@@ -1,60 +1,59 @@
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">
-      {{ isEditing ? 'Edit Employee' : 'Add Employee' }}
-    </h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        Employee Form
+      </h4>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formGroup">
+        <div class="mb-3">
+          <label for="firstname">First Name</label>
+          <input type="text" id="firstname" class="form-control" formControlName="firstname" />
+          <div *ngIf="isFieldInvalid('firstname')" class="text-danger">First Name is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="lastname">Last Name</label>
+          <input type="text" id="lastname" class="form-control" formControlName="lastname" />
+          <div *ngIf="isFieldInvalid('lastname')" class="text-danger">Last Name is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="designation">Designation</label>
+          <input type="text" id="designation" class="form-control" formControlName="designation" />
+          <div *ngIf="isFieldInvalid('designation')" class="text-danger">Designation is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="department">Department</label>
+          <input type="text" id="department" class="form-control" formControlName="department" />
+          <div *ngIf="isFieldInvalid('department')" class="text-danger">Department is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="mobile">Mobile</label>
+          <input type="text" id="mobile" class="form-control" formControlName="mobile" />
+          <div *ngIf="isFieldInvalid('mobile')" class="text-danger">Mobile is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="mailId">Email</label>
+          <input type="email" id="mailId" class="form-control" formControlName="mailId" />
+          <div *ngIf="isFieldInvalid('mailId')" class="text-danger">Valid email is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="location">Location</label>
+          <input type="text" id="location" class="form-control" formControlName="location" />
+          <div *ngIf="isFieldInvalid('location')" class="text-danger">Location is required</div>
+        </div>
+        <div class="mb-3">
+          <label for="skypeId">Skype ID</label>
+          <input type="text" id="skypeId" class="form-control" formControlName="skypeId" />
+          <div *ngIf="isFieldInvalid('skypeId')" class="text-danger">Skype ID is required</div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="isEditing ? updateEmployee() : addEmployee()"
+        [disabled]="!formGroup.valid">
+        {{ isEditing ? 'Update' : 'Save' }}
+      </button>
+    </div>
   </div>
-  <div class="modal-body">
-    <form [formGroup]="formGroup" >
-      <div class="mb-3">
-        <label for="firstname">First Name</label>
-        <input type="text" id="firstname" class="form-control" formControlName="firstname"/>
-        <div *ngIf="isFieldInvalid('firstname')" class="text-danger">First Name is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="lastname">Last Name</label>
-        <input type="text" id="lastname" class="form-control" formControlName="lastname" />
-        <div *ngIf="isFieldInvalid('lastname')" class="text-danger">Last Name is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="designation">Designation</label>
-        <input type="text" id="designation" class="form-control" formControlName="designation" />
-        <div *ngIf="isFieldInvalid('designation')" class="text-danger">Designation is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="department">Department</label>
-        <input type="text" id="department" class="form-control" formControlName="department" />
-        <div *ngIf="isFieldInvalid('department')" class="text-danger">Department is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="mobile">Mobile</label>
-        <input type="text" id="mobile" class="form-control" formControlName="mobile" />
-        <div *ngIf="isFieldInvalid('mobile')" class="text-danger">Mobile is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="mailId">Email</label>
-        <input type="email" id="mailId" class="form-control" formControlName="mailId" />
-        <div *ngIf="isFieldInvalid('mailId')" class="text-danger">Valid email is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="location">Location</label>
-        <input type="text" id="location" class="form-control" formControlName="location" />
-        <div *ngIf="isFieldInvalid('location')" class="text-danger">Location is required</div>
-      </div>
-      <div class="mb-3">
-        <label for="skypeId">Skype ID</label>
-        <input type="text" id="skypeId" class="form-control" formControlName="skypeId" />
-        <div *ngIf="isFieldInvalid('skypeId')" class="text-danger">Skype ID is required</div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
-    <button type="button" class="btn btn-outline-dark" (click)="isEditing ? updateEmployee() : addEmployee()" [disabled]="!formGroup.valid">
-      {{ isEditing ? 'Update' : 'Save' }}
-    </button>
-  </div>
-</ng-template>
-
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Add Employee</button>
+</div>

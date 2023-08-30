@@ -1,28 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { EmployeeService } from 'src/app/services/employee.service';
-import { FormGroup } from '@angular/forms';
-import { Employee } from 'src/app/models/employee.model';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, forwardRef } from '@angular/core';
+import { Employee } from 'src/app/models/employee';
 
 @Component({
   selector: 'app-card-container',
   templateUrl: './card-container.component.html',
   styleUrls: ['./card-container.component.scss']
 })
-
 export class CardContainerComponent implements OnInit {
   @Input() employees: Employee[] = [];
-  formGroup!: FormGroup;
-  @Input() filteredEmployees: Employee[] = [];
-  private allEmployees: Employee[] = [];
+  @Output() loadEmployeesEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor() { }
 
   ngOnInit() {
     this.loadEmployees();
-    this.filteredEmployees = this.allEmployees;
   }
 
   loadEmployees() {
-    this.employees = this.employeeService.initiate();
+    this.loadEmployeesEvent.emit();
   }
+
+  
 }

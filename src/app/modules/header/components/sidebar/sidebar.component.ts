@@ -1,9 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { EmployeeService } from '../../../../services/employee.service';
-import { NavigationEnd, Router } from '@angular/router';
-import { Employee } from '../../../../models/employee.model';
-import { EmployeeSelectedFilter } from '../../../../models/employee.model';
-import { emptyEmpMessage } from 'src/app/constants/constants';
+import { Component, EventEmitter, Inject, Input, Output, ViewChild, forwardRef } from '@angular/core';
+import { EmployeeSelectedFilter } from 'src/app/models/employee';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,34 +8,25 @@ import { emptyEmpMessage } from 'src/app/constants/constants';
 })
 
 export class SidebarComponent {
+  @Input() departments: string[] = [];
+  @Input() designation: string[] = [];
+  @Input() location: string[] = [];
+  @Output() applyFiltersEvent: EventEmitter<{ filterType: string, filterValue: string }> = new EventEmitter<{ filterType: string, filterValue: string }>();
+
   selectedFilters: EmployeeSelectedFilter = new EmployeeSelectedFilter();
-  departments: string[] = [];
-  offices: string[] = [];
-  jobTitles: string[] = [];
   departmentCounts: { [key: string]: number } = {};
   designationCounts: { [key: string]: number } = {};
   locationCounts: { [key: string]: number } = {};
-  allEmployees: Employee[] = [];
-  selectedDepartment: string = '';
   sections: { heading: string, items: any[] }[] = [];
-  filteredEmployees: Employee[] = [];
-  @Output() filteredEmployees$: EventEmitter<Employee[]> = new EventEmitter<Employee[]>();
-  emptyEmpMessage = emptyEmpMessage;
 
-  constructor(private employeeService: EmployeeService, private router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.allEmployees = this.employeeService.loadEmployeesFromLocalStorage();
-    //For Counts
-    this.departments = [...new Set(this.allEmployees.map(employee => employee.department))];
-    this.offices = [...new Set(this.allEmployees.map(employee => employee.location))];
-    this.jobTitles = [...new Set(this.allEmployees.map(employee => employee.designation))];
-
     //For Dynamic titles
     this.sections = [
       {
         heading: 'Departments',
-        items: this.departments.map(departmentName => ({
+        items: this.selectedFilters.departments.map(departmentName => ({
           type: 'department',
           name: departmentName,
           displayName: departmentName,
@@ -50,7 +37,7 @@ export class SidebarComponent {
       },
       {
         heading: 'Offices',
-        items: this.offices.map(officeName => ({
+        items: this.selectedFilters.location.map(officeName => ({
           type: 'offices',
           name: officeName,
           displayName: officeName,
@@ -61,7 +48,7 @@ export class SidebarComponent {
       },
       {
         heading: 'Job Titles',
-        items: this.jobTitles.map(jobTitleName => ({
+        items: this.selectedFilters.designation.map(jobTitleName => ({
           type: 'jobTitles',
           name: jobTitleName,
           displayName: jobTitleName,
@@ -71,85 +58,9 @@ export class SidebarComponent {
         })),
       },
     ];
-
-    //routing
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        const urlSegments = event.url.split('/');
-        const departmentSegmentIndex = urlSegments.indexOf('department');
-        const officesSegmentIndex = urlSegments.indexOf('offices');
-        const jobTitlesSegmentIndex = urlSegments.indexOf('jobTitles');
-
-        if (departmentSegmentIndex !== -1 && urlSegments.length > departmentSegmentIndex + 1) {
-          const department = decodeURIComponent(urlSegments[departmentSegmentIndex + 1]);
-          this.applyFilters('department', department);
-        } else if (departmentSegmentIndex !== -1) {
-          this.applyFilters('department', '');
-        }
-
-        if (officesSegmentIndex !== -1 && urlSegments.length > officesSegmentIndex + 1) {
-          const office = decodeURIComponent(urlSegments[officesSegmentIndex + 1]);
-          this.applyFilters('offices', office);
-        } else if (officesSegmentIndex !== -1) {
-          this.applyFilters('offices', '');
-        }
-
-        if (jobTitlesSegmentIndex !== -1 && urlSegments.length > jobTitlesSegmentIndex + 1) {
-          const jobTitle = decodeURIComponent(urlSegments[jobTitlesSegmentIndex + 1]);
-          this.applyFilters('jobTitles', jobTitle);
-        } else if (jobTitlesSegmentIndex !== -1) {
-          this.applyFilters('jobTitles', '');
-        }
-      }
-    });
   }
 
   applyFilters(filterType: string, filterValue: string): void {
-    switch (filterType) {
-      case 'department':
-        this.selectedFilters.departments = [filterValue];
-        this.router.navigateByUrl(`/department/${filterValue}`);
-        break;
-
-      case 'offices':
-        this.selectedFilters.offices = [filterValue];
-        this.router.navigateByUrl(`/offices/${filterValue}`);
-        break;
-
-      case 'jobTitles':
-        this.selectedFilters.jobtitle = [filterValue];
-        this.router.navigateByUrl(`/jobTitles/${filterValue}`);
-        break;
-
-      default:
-        break;
-    }
-
-    this.filterEmployeesBySelectedFilters();
-    if (this.filteredEmployees.length === 0) {
-      this.emptyEmpMessage;
-    }
-  }
-
-  
-
-  filterEmployeesBySelectedFilters(): void {
-    this.filteredEmployees = this.allEmployees.filter(employee => {
-      const matchesJobTitle = this.selectedFilters.jobtitle.length === 0 ||
-        this.selectedFilters.jobtitle.includes(employee.designation);
-
-      const matchesDepartment = this.selectedFilters.departments.length === 0 ||
-        this.selectedFilters.departments.includes(employee.department);
-
-      const matchesOffice = this.selectedFilters.offices.length === 0 ||
-        this.selectedFilters.offices.includes(employee.location);
-
-      return matchesJobTitle && matchesDepartment && matchesOffice;
-    });
-
-    this.filteredEmployees$.emit(this.filteredEmployees);
-    if (this.filteredEmployees.length === 0) {
-      this.emptyEmpMessage;
-    }
+    this.applyFiltersEvent.emit({ filterType, filterValue });
   }
 }

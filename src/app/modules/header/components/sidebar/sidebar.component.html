@@ -1,10 +1,10 @@
-<ng-container *ngFor="let section of sections">
+<div *ngFor="let section of sections">
   <div class="navbar">
     <p class="nav-heading">{{ section.heading }}</p>
     <div *ngFor="let item of section.items">
-      <a class="nav-element" [routerLink]="item.routerLink" [id]="item.id" (click)="applyFilters(item.type, item.name)">
+      <a class="nav-element" [id]="item.id" (click)="applyFilters(item.type, item.name)">
         {{ item.displayName }}</a>
-        <span class="nav-element" [innerText]="'(' + (item.count || 0) + ')'"></span>
+      <span class="nav-element">({{ item.count || 0 }})</span>
     </div>
   </div>
-</ng-container>
+</div>

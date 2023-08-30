@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Inject, forwardRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from 'src/app/services/employee.service';
-import { Employee } from 'src/app/models/employee.model';
-import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Employee } from 'src/app/models/employee';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'employee-form',
@@ -15,15 +15,11 @@ export class EmployeeFormComponent {
   @Output() addEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
   @Input() selectedEmployee!: Employee;
   @Output() updateEmp: EventEmitter<Employee> = new EventEmitter<Employee>();
-  addClicked: boolean = false;
   formGroup!: FormGroup;
-  closeResult = '';
-  modalRef!: NgbModalRef;
   isEditing: boolean = false;
 
   constructor(
     public modalService: NgbModal,
-    private employeeService: EmployeeService,
     private formBuilder: FormBuilder,
   ) { }
 
@@ -42,6 +38,7 @@ export class EmployeeFormComponent {
     if (this.employee) {
       this.formGroup.patchValue(this.employee);
     }
+    this.isEditing = false;
   }
 
   isFieldInvalid(fieldName: string) {
@@ -49,64 +46,25 @@ export class EmployeeFormComponent {
     return control?.invalid && (control?.touched || control?.dirty);
   }
 
-  open(content: TemplateRef<any>) {
-    const modalRef: NgbModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
-
-    modalRef.result.then(
-      (result: any) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason: any) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-  }
-
-  private getDismissReason(reason: string | ModalDismissReasons): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
   addEmployee(): void {
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
-      this.addClicked = true;
       return;
     }
 
     const newEmployee: Employee = {
       ...this.formGroup.value,
-      id: this.employeeService.generateUniqueId(this.employee)
     };
 
     this.addEmp.emit(newEmployee);
-    this.employeeService.addEmployee(newEmployee);
     this.formGroup.reset();
   }
 
-  populateForm(employee: Employee) {
-    this.employee = { ...employee };
-  }
-
   updateEmployee(): void {
-    if (this.formGroup.invalid) {
-      this.formGroup.markAllAsTouched();
-      return;
-    }
-
-    if (this.selectedEmployee) {
-      const updatedEmployee: Employee = {
-        id: this.selectedEmployee.id,
-        ...this.formGroup.value
-      };
-
-      this.employeeService.updateEmployee(updatedEmployee);
-      this.updateEmp.emit(updatedEmployee);
+    if (this.formGroup.valid) {
+      const updatedEmployee: Employee = this.formGroup.value;
+      updatedEmployee.id = this.employee.id;
+      this.formGroup.reset();
     }
   }
 }

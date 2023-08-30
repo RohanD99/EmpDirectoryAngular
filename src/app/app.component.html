@@ -1,14 +1,14 @@
 <div class="app-container">
-    <app-header></app-header>
-    <div class="content-container">
-        <div class="sidebar-container">
-            <app-sidebar ></app-sidebar>
-        </div>
-        <div class="main-container">
-            <app-navbar ></app-navbar>
-            <div class="card-container">
-                <app-card-container class="user-cards"></app-card-container>                 
-            </div>
-        </div>
+  <app-header></app-header>
+  <div class="content-container">
+    <div class="sidebar-container">
+      <app-sidebar [departments]="departments" [designation]="designation" [location]="location" (applyFiltersEvent)="applyFiltersHandler($event)"></app-sidebar>
     </div>
+    <div class="main-container">
+      <app-navbar [selectedFilters]="selectedFilters" (searchEvent)="searchHandler($event)" (characterSelectEvent)="characterSelectHandler($event)" (showAllEmployeesEvent)="showAllEmployeesHandler()"></app-navbar>
+      <div class="card-container">
+        <app-card-container class="user-cards" [employees]="filteredEmployees" (loadEmployeesEvent)="showAllEmployeesHandler()"></app-card-container>
+      </div>
+    </div>
+  </div>
 </div>

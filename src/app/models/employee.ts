@@ -26,8 +26,10 @@ export class Employee {
 }
 
 export class EmployeeSelectedFilter {
-  jobtitle: string[] = [];
+  designation: string[] = [];
   departments: string[] = [];
-  offices: string[] = [];
-  [key: string]: string[];
+  location: string[] = [];
+  searchValue: string = '';
+  selectedCharacter: string = '';
+  characters: string[] = [];
 }

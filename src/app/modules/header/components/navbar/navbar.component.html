@@ -1,8 +1,8 @@
 <div class="container">
   <div class="alpha-navbar" #alphaNavbar>
     <button class="alpha-btn user-icon-btn"><i class="fa-solid fa-user" (click)="showAllEmployees()"></i></button>
-    <button *ngFor="let character of characters" class="alpha-btn" [id]="'char-' + character.toLowerCase()"
-      [class.active]="selectedCharacter === character" (click)="selectCharacter(character)">
+    <button *ngFor="let character of selectedFilters.characters" class="alpha-btn"
+      [class.active]="selectedFilters.selectedCharacter === character" (click)="selectCharacter(character)">
       {{ character }}
     </button>
   </div>
@@ -12,7 +12,7 @@
       <div class="search-bar">
         <i class="fa-solid fa-magnifying-glass search-logo"></i>
         <input class="search-area" type="search" id="searchInput" name="input" placeholder="Enter any Keyword"
-          (input)="onSearch($event)" />
+        (input)="onSearch($event)" />
       </div>
       <button class="clear-btn" id="clearAllBtn" (click)="onClearAll()">Clear All</button>
       <label for="search-input" class="label">Filter by</label>
@@ -22,7 +22,7 @@
         <option value="department">Department</option>
       </select>
     </div>
-    <employee-form></employee-form>
+    <button class="btn btn-lg btn-outline-primary" (click)="openEmployeeForm()">Add Employee</button>
   </div>
   <p class="note">
     Note: <span class="note-desc">Please use the advanced filter option to refine your results.</span>

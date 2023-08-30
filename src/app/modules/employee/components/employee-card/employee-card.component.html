@@ -1,4 +1,4 @@
-<div class="user-card" >
+<div class="user-card">
   <img class="user-photo" src="assets/profile-pic.jpg">
   <div class="user-descr">
     <p class="user-name">{{ employee.preferredName || employee.firstname + ' ' + employee.lastname }} </p>
@@ -13,26 +13,6 @@
       <i class="fa-solid fa-heart social-icon"></i>
     </div>
     <i class="fa-solid fa-pen-to-square edit-icon" (click)="openEditModal(employee)"></i>
-    <i class="far fa-trash-alt delete-icon" (click)="openDeleteConfirmationModal(deleteConfirmation)"></i>
+    <i class="far fa-trash-alt delete-icon" (click)="openDeleteConfirmationModal()"></i>
   </div>
-  <ng-template #deleteConfirmation let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Delete Employee</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-    </div>
-    <div class="modal-body">
-      <p>Are you sure you want to delete this employee?</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="confirmDelete()">Delete</button>
-      <button type="button" class="btn btn-outline-dark" (click)="cancelDelete()">Cancel</button>
-    </div>
-  </ng-template>
-  
-  <div *ngIf="isDeleteConfirmation">
-    <ng-container *ngIf="deleteModalRef">
-      <ng-container ngbModalOutlet></ng-container>
-    </ng-container>
-  </div>
-  
 </div>

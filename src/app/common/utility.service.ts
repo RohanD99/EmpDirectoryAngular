@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
+import { Employee } from '../models/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,13 @@ export class Utility {
     }
 
     return characters;
+  }
+
+  generateUniqueId(employee: Employee): number {
+    const currentTimestamp = new Date().getTime();
+    const maxId = employee && employee.id ? employee.id : 0;
+    const uniqueId = Math.max(maxId + 1, currentTimestamp);
+    return uniqueId;
   }
 
   getFormControlValue(formGroup: FormGroup, controlName: string): any {

@@ -1,8 +1,6 @@
 // employees.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarComponent } from '../header/components/sidebar/sidebar.component';
-import { NavbarComponent } from '../header/components/navbar/navbar.component';
 import { CardContainerComponent } from './components/card-container/card-container.component';
 import { EmployeeService } from '../../services/employee.service';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,8 +10,6 @@ import { EmployeeCardComponent } from './components/employee-card/employee-card.
 
 @NgModule({
   declarations: [
-    SidebarComponent,
-    NavbarComponent,
     CardContainerComponent,
     EmployeeFormComponent,
     EmployeeCardComponent
@@ -23,8 +19,7 @@ import { EmployeeCardComponent } from './components/employee-card/employee-card.
     ReactiveFormsModule,
     RouterModule,  
   ],
-  exports: [ SidebarComponent,
-    NavbarComponent,
+  exports: [
     CardContainerComponent,
     EmployeeFormComponent,
     EmployeeCardComponent

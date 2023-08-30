@@ -7,12 +7,14 @@ import { RouterModule } from '@angular/router';
 import { HeaderModule } from './modules/header/nav.module';
 import { EmployeesModule } from './modules/employee/employees.module'; 
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalComponent } from './modals/modal/modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    
+    ModalComponent,
   ],
+  
   imports: [
     BrowserModule,
     NgbModule,

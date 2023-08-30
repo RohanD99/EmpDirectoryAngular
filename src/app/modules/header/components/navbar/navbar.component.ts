@@ -1,11 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { EmployeeService } from '../../../../services/employee.service';
-import { Router } from '@angular/router';
-import { Employee } from '../../../../models/employee.model';
-import { Utility } from '../../../../common/utility.service';
-import { EmployeeSelectedFilter } from '../../../../models/employee.model';
+import { EmployeeSelectedFilter } from 'src/app/models/employee';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { emptyEmpMessage } from 'src/app/constants/constants';
+import { EmployeeFormComponent } from 'src/app/modules/employee/components/employee-form/employee-form.component';
+import { Utility } from 'src/app/common/utility.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,112 +11,39 @@ import { emptyEmpMessage } from 'src/app/constants/constants';
 })
 
 export class NavbarComponent {
-  selectedFilters: EmployeeSelectedFilter = new EmployeeSelectedFilter(); // Initialize the filter
-  filteredEmployees: Employee[] = [];
-  characters: string[] = [];                                              // Selected characters on button
-  @Input() employees: Employee[] = [];                                    // Send to card-cont.
-  selectedCharacter: string = '';                                         // Initially empty character string
-  searchValue: string = '';                                               // Initially empty search value string
-  @Output() filteredEmployeesEvent = new EventEmitter<any[]>();
-  emptyEmpMessage = emptyEmpMessage;
-  closeResult = '';
+  @Input() selectedFilters: EmployeeSelectedFilter = new EmployeeSelectedFilter();   
+  @Output() searchEvent: EventEmitter<{ searchValue: string, filterBy: string }> = new EventEmitter<{ searchValue: string, filterBy: string }>();
+  @Output() characterSelectEvent: EventEmitter<string> = new EventEmitter<string>();
+  @Output() showAllEmployeesEvent: EventEmitter<void> = new EventEmitter<void>();
+  
+  constructor(private modalService: NgbModal,private utility: Utility) {
+    this.selectedFilters.characters = this.utility.generateAlphabets();
+  }
 
-
-  constructor(private employeeService: EmployeeService, private router: Router, private utility: Utility,private modalService: NgbModal) {
-    this.characters = this.utility.generateAlphabets();
-    this.filteredEmployees = this.employees; 
+  openEmployeeForm(): void {
+    this.modalService.open(EmployeeFormComponent);
   }
 
   showAllEmployees(): void {
-    this.selectedCharacter = '';
-    const employees = this.employeeService.loadEmployeesFromLocalStorage();
-    this.filteredEmployees = employees ? employees : [];
-    this.paginationFilter();
+    this.showAllEmployeesEvent.emit();
+  }
+
+  onClearAll(): void {
+    this.selectedFilters.searchValue = '';
+    this.showAllEmployees()
+  }
+
+  selectCharacter(character: string): void {
+    if (this.selectedFilters.selectedCharacter === character) {
+      return;
+    }
+    this.characterSelectEvent.emit(character); 
   }
 
   onSearch(event: Event): void {
     const target = event.target as HTMLInputElement;
     const searchValue = target.value.trim().toLowerCase();
     const filterBy = (document.getElementById('filterBy') as HTMLSelectElement).value;
-
-    const employees = this.employeeService.loadEmployeesFromLocalStorage();
-    this.filteredEmployees = employees.filter((employee: Employee) => {
-      const searchProperty =
-        filterBy === 'preferredName' ? employee.firstname.toLowerCase() :
-        filterBy === 'designation' ? employee.designation.toLowerCase() :
-        filterBy === 'department' ? employee.department.toLowerCase() :
-        employee.firstname.toLowerCase();
-
-      return searchProperty.includes(searchValue);
-    });
-
-    if (this.filteredEmployees.length === 0) {
-      this.emptyEmpMessage;
-    }
-
-    this.filteredEmployeesEvent.emit(this.filteredEmployees);
-  }
-
-  onClearAll(): void {
-    this.searchValue = '';
-    this.paginationFilter();
-  }
-
-  selectCharacter(character: string): void {
-    if (this.selectedCharacter === character) {
-      return;
-    }
-    this.selectedCharacter = character;
-    this.paginationFilter();
-    if (this.filteredEmployees.length === 0) {
-      this.emptyEmpMessage;
-    }
-  }
-
-  // Alphabets filter
-  paginationFilter(): void {
-    const employees = this.employeeService.loadEmployeesFromLocalStorage();
-    const filteredEmployees = employees.filter((employee: Employee) => {
-      const startsWithCharacter = !this.selectedCharacter ||
-        employee.firstname.charAt(0).toLowerCase() === this.selectedCharacter.toLowerCase();
-
-      const matchesJobTitle = this.selectedFilters.jobtitle.length === 0 ||
-        this.selectedFilters.jobtitle.includes(employee.designation);
-
-      const matchesDepartment = this.selectedFilters.departments.length === 0 ||
-        this.selectedFilters.departments.includes(employee.department);
-
-      const matchesOffice = this.selectedFilters.offices.length === 0 ||
-        this.selectedFilters.offices.includes(employee.location);
-
-      return startsWithCharacter && matchesJobTitle && matchesDepartment && matchesOffice;
-    });
-
-    this.filteredEmployees = filteredEmployees;
-    this.filteredEmployeesEvent.emit(this.filteredEmployees);
-  }
-
-  addEmployee(employee: Employee): void {
-    this.employees.push(employee);
-  }
-
-  updateEmployee(updatedEmployee: Employee): void {
-    this.employeeService.updateEmployee(updatedEmployee);
-  }
-
-  excludeMatchingNames(employees: Employee[], searchValue: string, filterBy: string): Employee[] {
-    return employees.filter((employee: Employee) => {
-      const searchProperty =
-        filterBy === 'preferredName' ? employee.firstname.toLowerCase() :
-        filterBy === 'designation' ? employee.designation.toLowerCase() :
-        filterBy === 'department' ? employee.department.toLowerCase() :
-        employee.firstname.toLowerCase();
-
-      const matchesPreferredName = filterBy !== 'preferredName' && employee.firstname.toLowerCase().includes(searchValue);
-      const matchesDepartment = filterBy !== 'department' && employee.department.toLowerCase().includes(searchValue);
-      const matchesDesignation = filterBy !== 'designation' && employee.designation.toLowerCase().includes(searchValue);
-
-      return searchProperty.includes(searchValue) && !matchesPreferredName && !matchesDepartment && !matchesDesignation;
-    });
+    this.searchEvent.emit({ searchValue, filterBy }); 
   }
 }
